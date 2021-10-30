@@ -31,6 +31,21 @@ namespace Project.DAL.Concrete.EntityFramework.Mappings
             builder.Property(r => r.Note).HasMaxLength(500);
 
             builder.ToTable("Roles");
+
+            builder.HasData(new Role
+            {
+                ID = 1,
+                Name  = "Admin",
+                Description = "Admin Rolü, Tüm Haklara Sahiptir.",
+                IsActive = true,
+                IsDeleted = false,
+                CreatedByName = "InitialCreate", //ilk oluşturma işlemi demektir. ilk veritabanı oluşurken buradaki entity'nin oluşmuş olmasıdır. Yani biz bunu kendimiz değil, veritabanın oluşturmuş olduğunu belirtmiş olduk...
+                CreatedDate = DateTime.Now,
+                ModifiedByName = "InitialCreate",
+                ModifiedDate = DateTime.Now,
+                Note="Admin Rolüdür."
+
+            });
         }
     }
 }

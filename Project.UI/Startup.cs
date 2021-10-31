@@ -17,6 +17,10 @@ namespace Project.UI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews() //MVC projesi olarak çalýþmasý gerektiðini söyledik..Ayný zamanda aþaðýdaki Configure içine herhangi bir istek gekdiðinde uygulamanýn nereye gideceði verilmelidir..
+                .AddRazorRuntimeCompilation(); //Forntend tarafýnda her bir deðiþiklikte kodlarýmýzý yeniden derlememize gerek kalmasýn, derlemeden deðiþklikleri görebilelim diye ekledik..
+
+            services.AddAutoMapper(typeof(Startup)); //Derlenme esnasýnda automapper'ýn burdaki sýnýflarý taramasýný saðlar..
             services.LoadMyServices();
         }
 
@@ -26,16 +30,21 @@ namespace Project.UI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseStatusCodePages(); //Hatalarýn uyarýlarýný page'de görmemizi saðlar
+
             }
 
+            app.UseStaticFiles(); //Resimler, css dosyalarý, js dosyalarý kullanmamýzý saðlar.
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapAreaControllerRoute(
+                    name:"Admin", 
+                    areaName:"Admin", 
+                    pattern: "Admin/{controller=Home}/{action=Index}/{id?}"
+                    ); //Admin Area'nýn route'ýný belirledik...Örneðin biz admin area içindeki article index'e gidersek burada eklenmiþ olan tüm makaleleri bir tablo içerisinde görebileceðiz. Burda crud iþlemleri yapabiliriz. Ancak direkt olarak sitedeki article index'e gidersek buradaki tüm makalaleri bir blog tablosunda göreceðiz...
+                endpoints.MapDefaultControllerRoute(); //Varsayýlan olarak site açýldýðýnda HomeController ve Index kýsmýna git dedik..
             });
         }
     }

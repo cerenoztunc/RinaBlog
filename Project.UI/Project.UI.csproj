@@ -13,4 +13,9 @@
     <ProjectReference Include="..\Project.BLL\Project.BLL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

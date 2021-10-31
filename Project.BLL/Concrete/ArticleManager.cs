@@ -31,7 +31,8 @@ namespace Project.BLL.Concrete
             article.ModifiedByName = createdByName;
             article.UserID = 1;
 
-            await _unitOfWork.Articles.AddAsync(article).ContinueWith(x => _unitOfWork.SaveAsync());
+            await _unitOfWork.Articles.AddAsync(article);
+            await _unitOfWork.SaveAsync();
             return new Result(ResultStatus.Success, $"{articleAddDto.Title} başlıklı makale başarıyla eklendi.");
         }
 
@@ -45,7 +46,8 @@ namespace Project.BLL.Concrete
                 article.ModifiedByName = modifiedByName;
                 article.ModifiedDate = DateTime.Now;
 
-                await _unitOfWork.Articles.UpdateAsync(article).ContinueWith(x => _unitOfWork.SaveAsync());
+                await _unitOfWork.Articles.UpdateAsync(article);
+                await _unitOfWork.SaveAsync();
                 return new Result(ResultStatus.Success, $"{article.Title} başlıklı makale başarıyla silindi.");
             }
             return new Result(ResultStatus.Error, "Böyle bir makale bulunamadı.");
@@ -134,7 +136,8 @@ namespace Project.BLL.Concrete
                 var article = await _unitOfWork.Articles.GetAsync(a => a.ID == articleID);
                
 
-                await _unitOfWork.Articles.DeleteAsync(article).ContinueWith(x => _unitOfWork.SaveAsync());
+                await _unitOfWork.Articles.DeleteAsync(article);
+                await _unitOfWork.SaveAsync();
                 return new Result(ResultStatus.Success, $"{article.Title} başlıklı makale başarıyla veritabanında silindi.");
             }
             return new Result(ResultStatus.Error, "Böyle bir makale bulunamadı.");
@@ -146,7 +149,8 @@ namespace Project.BLL.Concrete
             article.ModifiedByName = modifiedByName;
             article.UserID = 1;
 
-            await _unitOfWork.Articles.UpdateAsync(article).ContinueWith(x => _unitOfWork.SaveAsync());
+            await _unitOfWork.Articles.UpdateAsync(article);
+            await _unitOfWork.SaveAsync();
             return new Result(ResultStatus.Success, $"{articleUpdateDto.Title} başlıklı makale başarıyla güncellendi.");
         }
     }

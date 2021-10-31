@@ -20,7 +20,7 @@ namespace Project.BLL.Extensions
             serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>(); //Eğer biri senden IUnitOfWork isterse UnitOfWork demiş olduk..Buradaki scoped olarak eklememizin sebebi dbcontext'in de özünde scope olmasıdır..Scoped her request'te nesnesinin tekrar oluşmasını ve bir request içerisinde sadece bir tane nesne kullanılmasını sağlar. 
             serviceCollection.AddScoped<ICategoryService, CategoryManager>();
             serviceCollection.AddScoped<IArticleService, ArticleManager>();
-
+2
             return serviceCollection;
         }
     }

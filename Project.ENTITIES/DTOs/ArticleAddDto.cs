@@ -60,8 +60,5 @@ namespace Project.ENTITIES.DTOs
         [Required(ErrorMessage = "{0} alanı boş geçilemez!")]
         public bool IsActive { get; set; }
 
-        [DisplayName("Silinsin Mi?")]
-        [Required(ErrorMessage = "{0} alanı boş geçilemez!")]
-
     }
 }

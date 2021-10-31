@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Project.BLL.AutoMapper.Profiles;
 using Project.BLL.Extensions;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace Project.UI
             services.AddControllersWithViews() //MVC projesi olarak çalýþmasý gerektiðini söyledik..Ayný zamanda aþaðýdaki Configure içine herhangi bir istek gekdiðinde uygulamanýn nereye gideceði verilmelidir..
                 .AddRazorRuntimeCompilation(); //Forntend tarafýnda her bir deðiþiklikte kodlarýmýzý yeniden derlememize gerek kalmasýn, derlemeden deðiþklikleri görebilelim diye ekledik..
 
-            services.AddAutoMapper(typeof(Startup)); //Derlenme esnasýnda automapper'ýn burdaki sýnýflarý taramasýný saðlar..
+            services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile)); //Derlenme esnasýnda automapper'ýn burdaki sýnýflarý taramasýný saðlar..
             services.LoadMyServices();
         }
 

@@ -10,11 +10,13 @@ using System.Threading.Tasks;
 
 namespace Project.DAL.Concrete.EntityFramework.Repositories
 {
-    public class EfCategoryRepository:EfEntityRepositoryBase<Category>,ICategoryRepository
+    public class EfCategoryRepository : EfEntityRepositoryBase<Category>, ICategoryRepository
     {
-        public EfCategoryRepository(DbContext context):base(context)
+        public EfCategoryRepository(DbContext context) : base(context)
         {
 
         }
+
+
     }
 }

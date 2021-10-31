@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Project.DAL.Concrete.EntityFramework.Repositories
 {
-    public class EfCommentRepository:EfEntityRepositoryBase<Comment>,ICommentRepository
+    public class EfCommentRepository : EfEntityRepositoryBase<Comment>, ICommentRepository
     {
-        public EfCommentRepository(DbContext context):base(context)
+        public EfCommentRepository(DbContext context) : base(context)
         {
 
         }

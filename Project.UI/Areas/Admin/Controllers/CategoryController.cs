@@ -27,5 +27,9 @@ namespace Project.UI.Areas.Admin.Controllers
             //} //Bu if controlüne gerek kalmadı artık. Çünkü Category managerda ihtiyacımız olan her şeyi result'ın içine attık. Bu sayede işlem başarılı da hatalı da dönse result.Data bunu içeriyor. Bu sayede artık tek bir view'de başarılı dönerse category'leri sıralayan bir tabloyu ya da hatalı dönerse bir hata mesajını gösterebiliyoruz..
             return View(result.Data);
         }
+        public IActionResult Add()
+        {
+            return PartialView("_CategoryAddPartial");
+        }
     }
 }

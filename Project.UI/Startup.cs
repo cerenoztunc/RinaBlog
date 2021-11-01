@@ -8,6 +8,8 @@ using Project.BLL.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Project.UI
@@ -19,7 +21,13 @@ namespace Project.UI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews() //MVC projesi olarak çalýþmasý gerektiðini söyledik..Ayný zamanda aþaðýdaki Configure içine herhangi bir istek gekdiðinde uygulamanýn nereye gideceði verilmelidir..
-                .AddRazorRuntimeCompilation(); //Forntend tarafýnda her bir deðiþiklikte kodlarýmýzý yeniden derlememize gerek kalmasýn, derlemeden deðiþklikleri görebilelim diye ekledik..
+                .AddRazorRuntimeCompilation() //Forntend tarafýnda her bir deðiþiklikte kodlarýmýzý yeniden derlememize gerek kalmasýn, derlemeden deðiþklikleri görebilelim diye ekledik..
+                .AddJsonOptions(opt=> {
+                    opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+                
+                });
+            
 
             services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile)); //Derlenme esnasýnda automapper'ýn burdaki sýnýflarý taramasýný saðlar..
             services.LoadMyServices();

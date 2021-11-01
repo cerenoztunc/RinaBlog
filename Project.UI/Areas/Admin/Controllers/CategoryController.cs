@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project.BLL.Abstract;
+using Project.ENTITIES.DTOs;
+using Project.SHARED.Utilities.Extensions;
 using Project.SHARED.Utilities.Results.ComplexTypes;
+using Project.UI.Areas.Admin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Project.UI.Areas.Admin.Controllers
@@ -30,6 +34,31 @@ namespace Project.UI.Areas.Admin.Controllers
         public IActionResult Add()
         {
             return PartialView("_CategoryAddPartial");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(CategoryAddDto categoryAddDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _categoryService.Add(categoryAddDto, "Ceren Oztunc");
+                if(result.ResultStatus == ResultStatus.Success)
+                {
+                    var categoryAddAjaxModel = JsonSerializer.Serialize(new CategoryAddAjaxViewModel
+                    {
+                        CategoryDto = result.Data,
+                        CategoryAddPartial = await this.RenderViewToStringAsync("_CategoryAddPartial", categoryAddDto) //buna bir daha güncellenmiş değeri göndermek için ihtiyacımız var..
+                    });
+                    return Json(categoryAddAjaxModel);
+                }
+                
+            }
+            var categoryAddAjaxErrorModel = JsonSerializer.Serialize(new CategoryAddAjaxViewModel
+            {
+                CategoryAddPartial = await this.RenderViewToStringAsync("_CategoryAddPartial", categoryAddDto) //hatalı input'larla ilgili hata mesajlarını gösterecek..
+            });
+            return Json(categoryAddAjaxErrorModel);
+
         }
     }
 }

@@ -7,7 +7,7 @@
 }
 @if (Model.ResultStatus == ResultStatus.Success)
 {
-    <div id="modalPlaceholder" aria-hidden="true"></div>
+    <div id="modalPlaceHolder" aria-hidden="true"></div>
     <div class="card mb-4 mt-2">
         <div class="card-header">
             <i class="fas fa-table mr-1"></i>
@@ -74,39 +74,39 @@
     </div>
 
 }
-@section Scripts {
+@section Scripts 
+{
 
     <script>
         $(document).ready(function () {
 
-    /* DataTables start here. */
+            /* DataTables start here. */
+            $('#categoriesTable').DataTable({
+                dom:
+                "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                "order": [[6,"desc"]],
+                buttons: [
+                {
+                    text: 'Ekle',
+                    attr: {
+                        id: "btnAdd",
+                    },
+                    className: 'btn btn-success',
+                    action: function (e, dt, node, config) {
 
-    $('#categoriesTable').DataTable({
-        dom:
-            "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        "order": [[6,"desc"]],
-        buttons: [
-            {
-                text: 'Ekle',
-                attr: {
-                    id: "btnAdd",
+                    }
                 },
-                className: 'btn btn-success',
-                action: function (e, dt, node, config) {
-                    
+                {
+                    text: 'Yenile',
+                    className: 'btn btn-warning',
+                    action: function (e, dt, node, config) {
+
+                    }
                 }
-            },
-            {
-                text: 'Yenile',
-                className: 'btn btn-warning',
-                action: function (e, dt, node, config) {
-                    
-                }
-            }
-        ],
-        language: {
+                ],
+                language: {
             "emptyTable": "Tabloda herhangi bir veri mevcut değil",
             "info": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
             "infoEmpty": "Kayıt yok",
@@ -244,23 +244,61 @@
             "searchPlaceholder": "Ara",
             "thousands": "."
         }
-    });
+            });
 
-    /* DataTables ends here */
-    /* Ajax GET / Getting the _CategoryAddPartial as Modal Form start here */
-
-    $(function () {
-        const url = '/Admin/Category/Add/';
-        const placeholderDiv = $('#modalPlaceholder');
-        $('#btnAdd').click(function () {
-            $.get(url).done(function (data) {
-                placeholderDiv.html(data);
-                placeholderDiv.find(".modal").modal('show');
+            /* DataTables ends here */
+            /* Ajax GET / Getting the _CategoryAddPartial as Modal Form start here */
+            $(function () {
+                const url = '@Url.Action("Add", "Category")';
+                const placeHolderDiv = $('#modalPlaceHolder');
+                $('#btnAdd').click(function () {
+                    $.get(url).done(function (data) {
+                        placeHolderDiv.html(data);
+                        placeHolderDiv.find(".modal").modal('show');
+                    });
+                });
+                @*Ajax POST / Posting the FormData as CategoryAddDto starts from here.*@
+                placeHolderDiv.on('click', '#btnSave', function (event) {
+                    event.preventDefault();
+                    const form = $('#form-category-add');
+                    const actionUrl = form.attr('action'); //burası bize url oluşturacak..Yani bu formun hangi url'e post edileceğini belirtecek..
+                    const dataToSend = form.serialize(); //form içindeki veriyi CategoryAddDto olarak dönüştürdük..post işlemin Neyin gönderileceğini söyleyeceğiz..
+                    $.post(actionUrl, dataToSend).done(function (data) {
+                        const categoryAddAjaxModel = jQuery.parseJSON(data); //C# tarafındaki viewmodel gibi bir model almış olduk..
+                        const newFormBody = $('.modal-body', categoryAddAjaxModel.CategoryAddPartial); //form modal içerisine doldurduk alınan bilgileri..bu aynı zamanda kullanıcının yaptığı hatalar varsa kullanıcıyı bilgilendirmeyi sağlayacak..
+                        placeHolderDiv.find('.modal-body').replaceWith(newFormBody); //yeni alınan body ile eskisinin yerini değiştirdik..
+                        const isValid = newFormBody.find('[name="IsValid"]').val() === 'True'; //geçerli olup olmadığının kontrolünü sağlıyoruz. eğer yakaladığımız IsValid attribute'u true ise hata yo demektir. ancak false ise isValid değişkenine false atanacağından hatalar döndürülecek..
+                        if (isValid) {
+                            placeHolderDiv.find('.modal').modal('hide');
+                            const newTableRow =
+                                `<tr>
+                                <td>${categoryAddAjaxModel.CategoryDto.Category.ID}</td>
+                                <td>${categoryAddAjaxModel.CategoryDto.Category.Name}</td>
+                                <td>${categoryAddAjaxModel.CategoryDto.Category.Description}</td>
+                                <td>${convertFirstLetterToUpperCase(categoryAddAjaxModel.CategoryDto.Category.IsActive.toString())}</td>
+                                <td>${convertFirstLetterToUpperCase(categoryAddAjaxModel.CategoryDto.Category.IsDeleted.toString())}</td>
+                                <td>${categoryAddAjaxModel.CategoryDto.Category.Note}</td>
+                                <td>${convertToShortDate(categoryAddAjaxModel.CategoryDto.Category.CreatedDate)}</td>
+                                <td>${categoryAddAjaxModel.CategoryDto.Category.CreatedByName}</td>
+                                <td>${convertToShortDate(categoryAddAjaxModel.CategoryDto.Category.ModifiedDate)}</td>
+                                <td>${categoryAddAjaxModel.CategoryDto.Category.ModifiedByName}</td>
+                            </tr>`;
+                            const newTableRowObject = $(newTableRow); //artık yeni bir row oluşturup içine attık..
+                            newTableRowObject.hide(); //yeni row'u gizledik..
+                            $('#categoriesTable').append(newTableRowObject); //bize dönen objeyi yeni row'un içine doldurup tablonun sonuna ekledik..
+                            newTableRowObject.fadeIn(3500); //efektli bir şekilde 3 buçuk saniyede görünmesini sağladık..
+                            toastr.success(`${categoryAddAjaxModel.CategoryDto.Message}`, 'Başarılı İşlem!') //sayfanın sağ üst köşesinde toastr mesajını gösterdik..
+                        } else {
+                            let summaryText = "";
+                            $('#validation-summary > ul > li').each(function () {
+                                let text = $(this).text(); //her bir ul içinde bulunan li'nin yazısını aldık ve summaryText içine topladık. Bunu yaparekn 
+                                summaryText = `*${text}\n`; //başında yıldız çıkmasını ve her bir uyarıdan sonra alt satıra geçmesini sağladık..
+                            });
+                            toastr.warning(summaryText);
+                        }
+                    });
+                });
             });
         });
-    });
-});
     </script>
-
-    
 }

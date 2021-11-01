@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Project.UI.Areas.Admin.Controllers
@@ -24,13 +25,14 @@ namespace Project.UI.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var result = await _categoryService.GetAll();
+            var result = await _categoryService.GetAllByNonDeleted();
             //if(result.ResultStatus == ResultStatus.Success)
             //{
             //    return View(result.Data);
             //} //Bu if controlüne gerek kalmadı artık. Çünkü Category managerda ihtiyacımız olan her şeyi result'ın içine attık. Bu sayede işlem başarılı da hatalı da dönse result.Data bunu içeriyor. Bu sayede artık tek bir view'de başarılı dönerse category'leri sıralayan bir tabloyu ya da hatalı dönerse bir hata mesajını gösterebiliyoruz..
             return View(result.Data);
         }
+        [HttpGet]
         public IActionResult Add()
         {
             return PartialView("_CategoryAddPartial");
@@ -59,6 +61,22 @@ namespace Project.UI.Areas.Admin.Controllers
             });
             return Json(categoryAddAjaxErrorModel);
 
+        }
+        public async Task<JsonResult> GetAllCategories()
+        {
+            var result = await _categoryService.GetAllByNonDeleted();
+            var categories = JsonSerializer.Serialize(result.Data, new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
+            return Json(categories);
+        }
+        [HttpPost]
+        public async Task<JsonResult> Delete(int categoryID)
+        {
+            var result = await _categoryService.Delete(categoryID, "Ceren Öztunç");
+            var deletedCategory = JsonSerializer.Serialize(result.Data);
+            return Json(deletedCategory);
         }
     }
 }

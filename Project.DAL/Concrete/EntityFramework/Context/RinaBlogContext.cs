@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Project.DAL.Concrete.EntityFramework.Context
 {
-    public class RinaBlogContext:IdentityDbContext<User,Role,int>
+    public class RinaBlogContext:IdentityDbContext<User,Role,int,UserClaim,UserRole,UserLogin,RoleClaim,UserToken>
     {
         public DbSet<Article> Articles { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -26,6 +26,11 @@ namespace Project.DAL.Concrete.EntityFramework.Context
             modelBuilder.ApplyConfiguration(new CommentMap());
             modelBuilder.ApplyConfiguration(new RoleMap());
             modelBuilder.ApplyConfiguration(new UserMap());
+            modelBuilder.ApplyConfiguration(new RoleClaimMap());
+            modelBuilder.ApplyConfiguration(new UserClaimMap());
+            modelBuilder.ApplyConfiguration(new UserRoleMap());
+            modelBuilder.ApplyConfiguration(new UserTokenMap());
+            modelBuilder.ApplyConfiguration(new UserLoginMap());
         }
     }
 }

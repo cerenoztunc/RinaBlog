@@ -12,6 +12,7 @@ namespace Project.BLL.Abstract
     public interface ICategoryService
     {
         Task<IDataResult<CategoryDto>> Get(int categoryID);
+        Task<IDataResult<CategoryUpdateDto>> GetCategoryUpdateDto(int categoryID);
         Task<IDataResult<CategoryListDto>> GetAll();
         Task<IDataResult<CategoryListDto>> GetAllByNonDeleted();
         Task<IDataResult<CategoryListDto>> GetAllByNonDeletedAndActive();

@@ -62,6 +62,44 @@ namespace Project.UI.Areas.Admin.Controllers
             return Json(categoryAddAjaxErrorModel);
 
         }
+        [HttpGet]
+        public async Task<IActionResult> Update(int categoryID)
+        {
+            var result = await _categoryService.GetCategoryUpdateDto(categoryID);
+            if (result.ResultStatus == ResultStatus.Success)
+            {
+                return PartialView("_CategoryUpdatePartial", result.Data);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(CategoryUpdateDto categoryUpdateDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _categoryService.Update(categoryUpdateDto, "Ceren Oztunc");
+                if (result.ResultStatus == ResultStatus.Success)
+                {
+                    var categoryUpdateAjaxModel = JsonSerializer.Serialize(new CategoryUpdateAjaxViewModel
+                    {
+                        CategoryDto = result.Data,
+                        CategoryUpdatePartial = await this.RenderViewToStringAsync("_CategoryUpdatePartial", categoryUpdateDto) //buna bir daha güncellenmiş değeri göndermek için ihtiyacımız var..
+                    });
+                    return Json(categoryUpdateAjaxModel);
+                }
+
+            }
+            var categoryUpdateAjaxErrorModel = JsonSerializer.Serialize(new CategoryUpdateAjaxViewModel
+            {
+                CategoryUpdatePartial = await this.RenderViewToStringAsync("_CategoryUpdatePartial", categoryUpdateDto) //hatalı input'larla ilgili hata mesajlarını gösterecek..
+            });
+            return Json(categoryUpdateAjaxErrorModel);
+
+        }
+
         public async Task<JsonResult> GetAllCategories()
         {
             var result = await _categoryService.GetAllByNonDeleted();

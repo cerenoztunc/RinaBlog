@@ -145,6 +145,21 @@ namespace Project.BLL.Concrete
             return new DataResult<CategoryListDto>(ResultStatus.Error, "Hiç bir kategori bulunamadı.", null);
         }
 
+        public async Task<IDataResult<CategoryUpdateDto>> GetCategoryUpdateDto(int categoryID)
+        {
+            var result = await _unitOfWork.Categories.AnyAsync(c => c.ID == categoryID);
+            if (result)
+            {
+                var category = await _unitOfWork.Categories.GetAsync(c => c.ID == categoryID);
+                var categoryUpdateDto = _mapper.Map<CategoryUpdateDto>(category);
+                return new DataResult<CategoryUpdateDto>(ResultStatus.Success, categoryUpdateDto);
+            }
+            else
+            {
+                return new DataResult<CategoryUpdateDto>(ResultStatus.Error, "Böyle bir kategori bulunamadı", null);
+            }
+        }
+
         public async Task<IResult> HardDelete(int categoryID)
         {
             var category = await _unitOfWork.Categories.GetAsync(c => c.ID == categoryID);
@@ -161,7 +176,8 @@ namespace Project.BLL.Concrete
 
         public async Task<IDataResult<CategoryDto>> Update(CategoryUpdateDto categoryUpdateDto, string modifiedByName)
         {
-            var category = _mapper.Map<Category>(categoryUpdateDto);
+            var oldCategory = await _unitOfWork.Categories.GetAsync(c => c.ID == categoryUpdateDto.ID);
+            var category = _mapper.Map<CategoryUpdateDto,Category>(categoryUpdateDto,oldCategory);
             category.ModifiedByName = modifiedByName;
             var updatedCategory = await _unitOfWork.Categories.UpdateAsync(category);
 

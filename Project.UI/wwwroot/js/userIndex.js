@@ -2,12 +2,12 @@
 
 /* DataTables start here. */
 
-    $('#categoriesTable').DataTable({
+    $('#usersTable').DataTable({
         dom:
             "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
             "<'row'<'col-sm-12'tr>>" +
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        //"order": [[6, "desc"]],
+        
         buttons: [
             {
                 text: 'Ekle',
@@ -25,51 +25,47 @@
                 action: function (e, dt, node, config) {
                     $.ajax({
                         type: 'GET',
-                        url: '/Admin/Category/GetAllCategories/',
+                        url: '/Admin/User/GetAllUsers/',
                         contentType: 'application/json',
                         beforeSend: function () {
-                            $('#categoriesTable').hide(); //table'ı gizledik ve
+                            $('#usersTable').hide(); //table'ı gizledik ve
                             $('.spinner-border').show(); //table'ın hemen üstüne koyduğumuz yükleniyor görselini görünür hale getirdik
                         },
                         success: function (data) {
-                            const categoryListDto = jQuery.parseJSON(data);
-                            if (categoryListDto.ResultStatus === 0) {
+                            const userListDto = jQuery.parseJSON(data);
+                            if (userListDto.ResultStatus === 0) {
                                 let tableBody = "";
-                                $.each(categoryListDto.Categories.$values, function (index, category) {
+                                $.each(userListDto.Users.$values, function (index, user) {
                                     tableBody +=
                                         `<tr>
-                                            <td>${category.ID}</td>
-                                            <td>${category.Name}</td>
-                                            <td>${category.Description}</td>
-                                            <td>${convertFirstLetterToUpperCase(category.IsActive.toString())}</td>
-                                            <td>${convertFirstLetterToUpperCase(category.IsDeleted.toString())}</td>
-                                            <td>${category.Note}</td>
-                                            <td>${convertToShortDate(category.CreatedDate)}</td>
-                                            <td>${category.CreatedByName}</td>
-                                            <td>${convertToShortDate(category.ModifiedDate)}</td>
-                                            <td>${category.ModifiedByName}</td>
+                                            <td>${user.Id}</td>
+                                            <td>${user.UserName}</td>
+                                            <td>${user.Email}</td>
+                                            <td>${user.PhoneNumber}</td>
+                                            <td>${user.Picture}</td>
+                                            
                                             <td>
-                                                <button class="btn btn-primary btn-sm btn-update" data-id="${category.ID}">
+                                                <button class="btn btn-primary btn-sm btn-update" data-id="${user.Id}">
                                                     <span class="fas fa-edit"></span>
                                                 </button>
-                                                <button class="btn btn-danger btn-sm btn-delete" data-id="${category.ID}">
+                                                <button class="btn btn-danger btn-sm btn-delete" data-id="${user.Id}">
                                                     <span class="fas fa-minus-circle"></span>
                                                 </button>
                                             </td>
                                         </tr>`;
                                 });
-                                $('#categoriesTable > tbody').replaceWith(tableBody); //tbody html'i bizim güncellenmiş olan tableBody ile yer değiştirecek..
+                                $('#usersTable > tbody').replaceWith(tableBody); //tbody html'i bizim güncellenmiş olan tableBody ile yer değiştirecek..
                                 $('.spinner-border').hide();
-                                $('#categoriesTable').fadeIn(1400);
+                                $('#usersTable').fadeIn(1400);
                             } else {
-                                toastr.error(`${categoryListDto.Message}`, 'İşlem Başarısız!');
+                                toastr.error(`${userListDto.Message}`, 'İşlem Başarısız!');
                             }
 
                         },
                         error: function (err) {
                             console.log(err);
                             $('.spinner-border').hide();
-                            $('#categoriesTable').fadeIn(1000);
+                            $('#usersTable').fadeIn(1000);
                             toastr.error(`${err.responseText}`, 'Hata!');
                         }
                     });
@@ -111,10 +107,10 @@
 
 /* DataTables ends here */
 
-/* Ajax GET / Getting the _CategoryAddPartial as Modal Form start here */
+/* Ajax GET / Getting the _UserAddPartial as Modal Form start here */
 
     $(function () {
-        const url = '/Admin/Category/Add/';
+        const url = '/Admin/User/Add/';
         const placeHolderDiv = $('#modalPlaceHolder');
         $('#btnAdd').click(function () {
             $.get(url).done(function (data) {
@@ -123,22 +119,22 @@
             });
         });
 
-    /* Ajax POST / Posting the FormData as CategoryAddDto starts from here.*/
+    /* Ajax POST / Posting the FormData as UserAddDto starts from here.*/
 
         placeHolderDiv.on('click', '#btnSave', function (event) {
             event.preventDefault();
-            const form = $('#form-category-add');
+            const form = $('#form-user-add');
             const actionUrl = form.attr('action'); //burası bize url oluşturacak..Yani bu formun hangi url'e post edileceğini belirtecek..
             const dataToSend = form.serialize(); //form içindeki veriyi CategoryAddDto olarak dönüştürdük..post işlemin Neyin gönderileceğini söyleyeceğiz..
             $.post(actionUrl, dataToSend).done(function (data) {
-                const categoryAddAjaxModel = jQuery.parseJSON(data); //C# tarafındaki viewmodel gibi bir model almış olduk..
-                const newFormBody = $('.modal-body', categoryAddAjaxModel.CategoryAddPartial); //form modal içerisine doldurduk alınan bilgileri..bu aynı zamanda kullanıcının yaptığı hatalar varsa kullanıcıyı bilgilendirmeyi sağlayacak..
+                const userAddAjaxModel = jQuery.parseJSON(data); //C# tarafındaki viewmodel gibi bir model almış olduk..
+                const newFormBody = $('.modal-body', userAddAjaxModel.UserddPartial); //form modal içerisine doldurduk alınan bilgileri..bu aynı zamanda kullanıcının yaptığı hatalar varsa kullanıcıyı bilgilendirmeyi sağlayacak..
                 placeHolderDiv.find('.modal-body').replaceWith(newFormBody); //yeni alınan body ile eskisinin yerini değiştirdik..
                 const isValid = newFormBody.find('[name="IsValid"]').val() === 'True'; //geçerli olup olmadığının kontrolünü sağlıyoruz. eğer yakaladığımız IsValid attribute'u true ise hata yo demektir. ancak false ise isValid değişkenine false atanacağından hatalar döndürülecek..
                 if (isValid) {
                     placeHolderDiv.find('.modal').modal('hide');
                     const newTableRow =
-                        `<tr name="${categoryAddAjaxModel.CategoryDto.Category.ID}">
+                        `<tr name="${userAddAjaxModel.UserDto.User.Id}">
                                 <td>${categoryAddAjaxModel.CategoryDto.Category.ID}</td>
                                 <td>${categoryAddAjaxModel.CategoryDto.Category.Name}</td>
                                 <td>${categoryAddAjaxModel.CategoryDto.Category.Description}</td>
@@ -197,7 +193,7 @@
                     type: 'POST',
                     dataType: 'json',
                     data: { categoryID: id },
-                    url: '/Admin/Category/Delete/',
+                    url: '/Admin/User/Delete/',
                     success: function (data) {
                         const categoryDto = jQuery.parseJSON(data);
                         if (categoryDto.ResultStatus === 0) {
@@ -225,7 +221,7 @@
         });
     });
     $(function () {
-        const url = '/Admin/Category/Update/';
+        const url = '/Admin/User/Update/';
         const placeHolderDiv = $('#modalPlaceHolder');
         $(document).on('click', '.btn-update', function (event) {
             event.preventDefault();
@@ -245,7 +241,7 @@
 
         placeHolderDiv.on('click', '#btnUpdate', function (event) {
             event.preventDefault();
-            const form = $('#form-category-update');
+            const form = $('#form-user-update');
             const actionUrl = form.attr('action');
             const dataToSend = form.serialize();
             $.post(actionUrl, dataToSend).done(function (data) {

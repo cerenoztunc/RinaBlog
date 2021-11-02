@@ -11,8 +11,7 @@ namespace Project.DAL.Abstract
         IArticleRepository Articles { get; }
         ICategoryRepository Categories { get; }
         ICommentRepository Comments { get; }
-        IRoleRepository Roles { get; }
-        IUserRepository Users { get; } // _ unitOfWork.Categories.AddAsync();
+        // _ unitOfWork.Categories.AddAsync();
         Task<int> SaveAsync(); //Veritabanına burdan başka yere veriyi kaydetme işlemi yapmadık..
 
         //Örneğin;

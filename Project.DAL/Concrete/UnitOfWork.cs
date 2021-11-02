@@ -15,8 +15,7 @@ namespace Project.DAL.Concrete
         private EfArticleRepository _articleRepository;
         private EfCategoryRepository _categoryRepository;
         private EfCommentRepository _commentRepository;
-        private EfRoleRepository _roleRepository;
-        private EfUserRepository _userRepository;
+
         public UnitOfWork(RinaBlogContext context)
         {
             _context = context;
@@ -27,9 +26,7 @@ namespace Project.DAL.Concrete
 
         public ICommentRepository Comments => _commentRepository ?? new EfCommentRepository(_context);
 
-        public IRoleRepository Roles => _roleRepository ?? new EfRoleRepository(_context);
-
-        public IUserRepository Users => _userRepository ?? new EfUserRepository(_context); //null coalescing operatörü, eğer _userRepository varsa onu dön yoksa yeni bir instance al oluştur...
+       //null coalescing operatörü, eğer _commentRepository varsa onu dön yoksa yeni bir instance al oluştur...
 
         public async ValueTask DisposeAsync()
         {

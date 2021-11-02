@@ -27,10 +27,26 @@ namespace Project.UI
                     opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
                 
                 });
-            
+            services.AddSession();
 
             services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile)); //Derlenme esnasýnda automapper'ýn burdaki sýnýflarý taramasýný saðlar..
             services.LoadMyServices();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = new PathString("/Admin/User/Login"); 
+                options.LogoutPath = new PathString("/Admin/User/Logout");
+                options.Cookie = new CookieBuilder
+                {
+                    Name = "RinaBlog",
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict, //cookie bilgilerinin sadece bizim sitemiz üzerinden gelen bilgilerse kabul eder..
+                    SecurePolicy = CookieSecurePolicy.SameAsRequest
+                };
+                options.SlidingExpiration = true; //giriþ yapan kullanýcýlara verilen zaman
+                options.ExpireTimeSpan = System.TimeSpan.FromDays(7); // Kullanýcý 7 gün boyunca giriþli kalýr
+                options.AccessDeniedPath = new PathString("/Admin/User/AccessDenied"); //yetkisiz giriþler
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,9 +58,13 @@ namespace Project.UI
                 app.UseStatusCodePages(); //Hatalarýn uyarýlarýný page'de görmemizi saðlar
 
             }
+            app.UseSession();
 
             app.UseStaticFiles(); //Resimler, css dosyalarý, js dosyalarý kullanmamýzý saðlar.
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

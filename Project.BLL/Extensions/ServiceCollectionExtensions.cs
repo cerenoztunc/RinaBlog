@@ -18,7 +18,19 @@ namespace Project.BLL.Extensions
         public static IServiceCollection LoadMyServices(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddDbContext<RinaBlogContext>(); //DbContext'imizi kayıt ettik..
-            serviceCollection.AddIdentity<User, Role>().AddEntityFrameworkStores<RinaBlogContext>();
+            serviceCollection.AddIdentity<User, Role>(options => {
+                //user password options
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 5;
+                options.Password.RequiredUniqueChars = 0;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                //user username and email options
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+$";
+                options.User.RequireUniqueEmail = true;
+
+            }).AddEntityFrameworkStores<RinaBlogContext>();
             serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>(); //Eğer biri senden IUnitOfWork isterse UnitOfWork demiş olduk..Buradaki scoped olarak eklememizin sebebi dbcontext'in de özünde scope olmasıdır..Scoped her request'te nesnesinin tekrar oluşmasını ve bir request içerisinde sadece bir tane nesne kullanılmasını sağlar. 
             serviceCollection.AddScoped<ICategoryService, CategoryManager>();
             serviceCollection.AddScoped<IArticleService, ArticleManager>();

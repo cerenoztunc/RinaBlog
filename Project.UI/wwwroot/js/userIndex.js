@@ -2,7 +2,7 @@
 
 /* DataTables start here. */
 
-    $('#usersTable').DataTable({
+   const dataTable = $('#usersTable').DataTable({
         dom:
             "<'row'<'col-sm-3'l><'col-sm-6 text-center'B><'col-sm-3'f>>" +
             "<'row'<'col-sm-12'tr>>" +
@@ -125,47 +125,47 @@
             event.preventDefault();
             const form = $('#form-user-add');
             const actionUrl = form.attr('action'); //burası bize url oluşturacak..Yani bu formun hangi url'e post edileceğini belirtecek..
-            const dataToSend = form.serialize(); //form içindeki veriyi CategoryAddDto olarak dönüştürdük..post işlemin Neyin gönderileceğini söyleyeceğiz..
-            $.post(actionUrl, dataToSend).done(function (data) {
-                const userAddAjaxModel = jQuery.parseJSON(data); //C# tarafındaki viewmodel gibi bir model almış olduk..
-                const newFormBody = $('.modal-body', userAddAjaxModel.UserddPartial); //form modal içerisine doldurduk alınan bilgileri..bu aynı zamanda kullanıcının yaptığı hatalar varsa kullanıcıyı bilgilendirmeyi sağlayacak..
-                placeHolderDiv.find('.modal-body').replaceWith(newFormBody); //yeni alınan body ile eskisinin yerini değiştirdik..
-                const isValid = newFormBody.find('[name="IsValid"]').val() === 'True'; //geçerli olup olmadığının kontrolünü sağlıyoruz. eğer yakaladığımız IsValid attribute'u true ise hata yo demektir. ancak false ise isValid değişkenine false atanacağından hatalar döndürülecek..
-                if (isValid) {
-                    placeHolderDiv.find('.modal').modal('hide');
-                    const newTableRow =
-                        `<tr name="${userAddAjaxModel.UserDto.User.Id}">
-                                <td>${categoryAddAjaxModel.CategoryDto.Category.ID}</td>
-                                <td>${categoryAddAjaxModel.CategoryDto.Category.Name}</td>
-                                <td>${categoryAddAjaxModel.CategoryDto.Category.Description}</td>
-                                <td>${convertFirstLetterToUpperCase(categoryAddAjaxModel.CategoryDto.Category.IsActive.toString())}</td>
-                                <td>${convertFirstLetterToUpperCase(categoryAddAjaxModel.CategoryDto.Category.IsDeleted.toString())}</td>
-                                <td>${categoryAddAjaxModel.CategoryDto.Category.Note}</td>
-                                <td>${convertToShortDate(categoryAddAjaxModel.CategoryDto.Category.CreatedDate)}</td>
-                                <td>${categoryAddAjaxModel.CategoryDto.Category.CreatedByName}</td>
-                                <td>${convertToShortDate(categoryAddAjaxModel.CategoryDto.Category.ModifiedDate)}</td>
-                                <td>${categoryAddAjaxModel.CategoryDto.Category.ModifiedByName}</td>
-                                <td>
-                                     <button class="btn btn-primary btn-sm btn-update" data-id="${categoryAddAjaxModel.CategoryDto.Category.ID}">
-                                           <span class="fas fa-edit"></span>
-                                     </button>
-                                     <button class="btn btn-danger btn-sm btn-delete" data-id="${categoryAddAjaxModel.CategoryDto.Category.ID}">
-                                            <span class="fas fa-minus-circle"></span>
-                                     </button>
-                                </td>
-                            </tr>`;
-                    const newTableRowObject = $(newTableRow); //artık yeni bir row oluşturup içine attık..
-                    newTableRowObject.hide(); //yeni row'u gizledik..
-                    $('#categoriesTable').append(newTableRowObject); //bize dönen objeyi yeni row'un içine doldurup tablonun sonuna ekledik..
-                    newTableRowObject.fadeIn(3500); //efektli bir şekilde 3 buçuk saniyede görünmesini sağladık..
-                    toastr.success(`${categoryAddAjaxModel.CategoryDto.Message}`, 'Başarılı İşlem!') //sayfanın sağ üst köşesinde toastr mesajını gösterdik..
-                } else {
-                    let summaryText = "";
-                    $('#validation-summary > ul > li').each(function () {
-                        let text = $(this).text(); //her bir ul içinde bulunan li'nin yazısını aldık ve summaryText içine topladık. Bunu yaparekn
-                        summaryText = `*${text}\n`; //başında yıldız çıkmasını ve her bir uyarıdan sonra alt satıra geçmesini sağladık..
-                    });
-                    toastr.warning(summaryText);
+            const dataToSend = new FormData(form.get(0));
+            $.ajax({
+                url: actionUrl,
+                type: 'POST',
+                data: dataToSend,
+                processData: false,
+                contentType:false,
+                success: function (data) {
+                    const userAddAjaxModel = jQuery.parseJSON(data); //C# tarafındaki viewmodel gibi bir model almış olduk..
+                    const newFormBody = $('.modal-body', userAddAjaxModel.UserddPartial); //form modal içerisine doldurduk alınan bilgileri..bu aynı zamanda kullanıcının yaptığı hatalar varsa kullanıcıyı bilgilendirmeyi sağlayacak..
+                    placeHolderDiv.find('.modal-body').replaceWith(newFormBody); //yeni alınan body ile eskisinin yerini değiştirdik..
+                    const isValid = newFormBody.find('[name="IsValid"]').val() === 'True'; //geçerli olup olmadığının kontrolünü sağlıyoruz. eğer yakaladığımız IsValid attribute'u true ise hata yo demektir. ancak false ise isValid değişkenine false atanacağından hatalar döndürülecek..
+                    if (isValid) {
+                        placeHolderDiv.find('.modal').modal('hide');
+                        dataTable.row.add([
+                            userAddAjaxModel.UserDto.User.Id,
+                            userAddAjaxModel.UserDto.User.UserName,
+                            userAddAjaxModel.UserDto.User.Email,
+                            userAddAjaxModel.UserDto.User.PhoneNumber,
+                            `<img src="/img/${userAddAjaxModel.UserDto.User.Picture}" alt="${userAddAjaxModel.UserDto.User.UserName}" style="max-height: 50px; max-width: 50px; "/>`,
+                            `<td>
+                                    <button class="btn btn-primary btn-sm btn-update" data-id="userAddAjaxModel.UserDto.User.Id">
+                                        <span class="fas fa-edit"></span>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm btn-delete" data-id="userAddAjaxModel.UserDto.User.Id">
+                                        <span class="fas fa-minus-circle"></span>
+                                    </button>
+                            </td>`
+                        ]).draw();
+                        toastr.success(`${userAddAjaxModel.UserDto.Message}`, 'Başarılı İşlem!') //sayfanın sağ üst köşesinde toastr mesajını gösterdik..
+                    } else {
+                        let summaryText = "";
+                        $('#validation-summary > ul > li').each(function () {
+                            let text = $(this).text(); //her bir ul içinde bulunan li'nin yazısını aldık ve summaryText içine topladık. Bunu yaparekn
+                            summaryText = `*${text}\n`; //başında yıldız çıkmasını ve her bir uyarıdan sonra alt satıra geçmesini sağladık..
+                        });
+                        toastr.warning(summaryText);
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
                 }
             });
         });

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Project.BLL.AutoMapper.Profiles;
 using Project.BLL.Extensions;
+using Project.UI.AutoMapper.Profiles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace Project.UI
                 });
             services.AddSession();
 
-            services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile)); //Derlenme esnasýnda automapper'ýn burdaki sýnýflarý taramasýný saðlar..
+            services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile),typeof(UserProfile)); //Derlenme esnasýnda automapper'ýn burdaki sýnýflarý taramasýný saðlar..
             services.LoadMyServices();
 
             services.ConfigureApplicationCookie(options =>

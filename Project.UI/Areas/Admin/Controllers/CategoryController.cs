@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Project.BLL.Abstract;
 using Project.ENTITIES.DTOs;
 using Project.SHARED.Utilities.Extensions;
@@ -14,6 +15,8 @@ using System.Threading.Tasks;
 namespace Project.UI.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin, Editor")]
+
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;

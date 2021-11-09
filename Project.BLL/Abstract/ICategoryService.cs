@@ -20,5 +20,7 @@ namespace Project.BLL.Abstract
         Task<IDataResult<CategoryDto>> Update(CategoryUpdateDto categoryUpdateDto, string modifiedByName);
         Task<IDataResult<CategoryDto>> Delete(int categoryID, string modifiedByName);
         Task<IResult> HardDelete(int categoryID);
+        Task<IDataResult<int>> Count();
+        Task<IDataResult<int>> CountByIsDeleted();
     }
 }

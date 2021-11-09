@@ -6,6 +6,8 @@ using Microsoft.Extensions.Hosting;
 using Project.BLL.AutoMapper.Profiles;
 using Project.BLL.Extensions;
 using Project.UI.AutoMapper.Profiles;
+using Project.UI.Helpers.Abstract;
+using Project.UI.Helpers.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +34,7 @@ namespace Project.UI
 
             services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile),typeof(UserProfile)); //Derlenme esnasýnda automapper'ýn burdaki sýnýflarý taramasýný saðlar..
             services.LoadMyServices();
-
+            services.AddScoped<IImageHelper, ImageHelper>();
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = new PathString("/Admin/User/Login"); 

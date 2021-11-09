@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Project.BLL.Abstract;
+using Project.BLL.Utilities;
 using Project.DAL.Abstract;
 using Project.ENTITIES.Concrete;
 using Project.ENTITIES.DTOs;
@@ -33,7 +34,7 @@ namespace Project.BLL.Concrete
 
             await _unitOfWork.Articles.AddAsync(article);
             await _unitOfWork.SaveAsync();
-            return new Result(ResultStatus.Success, $"{articleAddDto.Title} başlıklı makale başarıyla eklendi.");
+            return new Result(ResultStatus.Success, Messages.Article.Add(articleAddDto.Title));
         }
 
         public async Task<IResult> Delete(int articleID, string modifiedByName)
@@ -48,9 +49,9 @@ namespace Project.BLL.Concrete
 
                 await _unitOfWork.Articles.UpdateAsync(article);
                 await _unitOfWork.SaveAsync();
-                return new Result(ResultStatus.Success, $"{article.Title} başlıklı makale başarıyla silindi.");
+                return new Result(ResultStatus.Success,Messages.Article.Delete(article.Title));
             }
-            return new Result(ResultStatus.Error, "Böyle bir makale bulunamadı.");
+            return new Result(ResultStatus.Error, Messages.Article.NotFound(isPlural:false));
         }
 
         public async Task<IDataResult<ArticleDto>> Get(int articleID)
@@ -64,7 +65,7 @@ namespace Project.BLL.Concrete
                     ResultStatus = ResultStatus.Success
                 });
             }
-            return new DataResult<ArticleDto>(ResultStatus.Error, "Böyle bir makale bulunamadı.", null);
+            return new DataResult<ArticleDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural:false), null);
         }
 
         public async Task<IDataResult<ArticleListDto>> GetAll()
@@ -77,7 +78,7 @@ namespace Project.BLL.Concrete
                     ResultStatus = ResultStatus.Success
                 });
             }
-            return new DataResult<ArticleListDto>(ResultStatus.Error, "Hiç bir makale bulunamadı.", null);
+            return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: true), null);
         }
 
         public async Task<IDataResult<ArticleListDto>> GetAllByCategory(int categoryID)
@@ -94,9 +95,9 @@ namespace Project.BLL.Concrete
                         ResultStatus = ResultStatus.Success
                     });
                 }
-                return new DataResult<ArticleListDto>(ResultStatus.Error, "Hiç bir makale bulunamadı.", null);
+                return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: true), null);
             }
-            return new DataResult<ArticleListDto>(ResultStatus.Error, "Böyle bir kategori bulunamadı.", null);
+            return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: false), null);
 
         }
 
@@ -111,7 +112,7 @@ namespace Project.BLL.Concrete
                     ResultStatus = ResultStatus.Success
                 });
             }
-            return new DataResult<ArticleListDto>(ResultStatus.Error, "Hiç bir makale bulunamadı.", null);
+            return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: true), null);
         }
 
         public async Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAndActive()
@@ -125,7 +126,7 @@ namespace Project.BLL.Concrete
                     ResultStatus = ResultStatus.Success
                 });
             }
-            return new DataResult<ArticleListDto>(ResultStatus.Error, "Hiç bir makale bulunamadı.", null);
+            return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: true), null);
         }
 
         public async Task<IResult> HardDelete(int articleID)
@@ -138,9 +139,9 @@ namespace Project.BLL.Concrete
 
                 await _unitOfWork.Articles.DeleteAsync(article);
                 await _unitOfWork.SaveAsync();
-                return new Result(ResultStatus.Success, $"{article.Title} başlıklı makale başarıyla veritabanında silindi.");
+                return new Result(ResultStatus.Success,Messages.Article.HardDelete(article.Title));
             }
-            return new Result(ResultStatus.Error, "Böyle bir makale bulunamadı.");
+            return new Result(ResultStatus.Error, Messages.Article.NotFound(isPlural: false));
         }
 
         public async Task<IResult> Update(ArticleUpdateDto articleUpdateDto, string modifiedByName)
@@ -151,7 +152,7 @@ namespace Project.BLL.Concrete
 
             await _unitOfWork.Articles.UpdateAsync(article);
             await _unitOfWork.SaveAsync();
-            return new Result(ResultStatus.Success, $"{articleUpdateDto.Title} başlıklı makale başarıyla güncellendi.");
+            return new Result(ResultStatus.Success, Messages.Article.Update(articleUpdateDto.Title));
         }
     }
 }

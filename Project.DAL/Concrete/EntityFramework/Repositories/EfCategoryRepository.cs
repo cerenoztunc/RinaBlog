@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project.DAL.Abstract;
+using Project.DAL.Concrete.EntityFramework.Context;
 using Project.ENTITIES.Concrete;
 using Project.SHARED.Data.Concrete.EntityFramework;
 using System;
@@ -15,6 +16,17 @@ namespace Project.DAL.Concrete.EntityFramework.Repositories
         public EfCategoryRepository(DbContext context) : base(context)
         {
 
+        }
+        public async Task<Category> GetById(int categoryID)
+        {
+           return await RinaBlogContext.Categories.SingleOrDefaultAsync(c => c.ID == categoryID);
+        }
+        private RinaBlogContext RinaBlogContext
+        {
+            get
+            {
+                return _context as RinaBlogContext;
+            }
         }
 
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Project.BLL.Abstract;
 using Project.BLL.Concrete;
 using Project.DAL.Abstract;
@@ -15,9 +16,9 @@ namespace Project.BLL.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection LoadMyServices(this IServiceCollection serviceCollection)
+        public static IServiceCollection LoadMyServices(this IServiceCollection serviceCollection,string connectionString)
         {
-            serviceCollection.AddDbContext<RinaBlogContext>(); //DbContext'imizi kayıt ettik..
+            serviceCollection.AddDbContext<RinaBlogContext>(options => options.UseSqlServer(connectionString)); //DbContext'imizi kayıt ettik..
             serviceCollection.AddIdentity<User, Role>(options => {
                 //user password options
                 options.Password.RequireDigit = false;

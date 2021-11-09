@@ -15,9 +15,13 @@ namespace Project.DAL.Concrete.EntityFramework.Context
         public DbSet<Article> Articles { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer( @"Server=LAPTOP-108G4A3E;Database=RinaBlogDB;Trusted_Connection=True;Connect Timeout=30;MultipleActiveResultSets=True;");
+        //}
+        public RinaBlogContext(DbContextOptions<RinaBlogContext> options):base(options)
         {
-            optionsBuilder.UseSqlServer( @"Server=LAPTOP-108G4A3E;Database=RinaBlogDB;Trusted_Connection=True;Connect Timeout=30;MultipleActiveResultSets=True;");
+
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

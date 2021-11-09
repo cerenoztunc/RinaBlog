@@ -156,12 +156,12 @@ namespace Project.DAL.Migrations
                         {
                             ID = 1,
                             CreatedByName = "InitialCreate",
-                            CreatedDate = new DateTime(2021, 11, 7, 11, 0, 51, 875, DateTimeKind.Local).AddTicks(1127),
+                            CreatedDate = new DateTime(2021, 11, 9, 14, 50, 24, 488, DateTimeKind.Local).AddTicks(3351),
                             Description = "C# Programlama ile İlgili En Güncel Bilgiler",
                             IsActive = true,
                             IsDeleted = false,
                             ModifiedByName = "InitialCreate",
-                            ModifiedDate = new DateTime(2021, 11, 7, 11, 0, 51, 875, DateTimeKind.Local).AddTicks(2265),
+                            ModifiedDate = new DateTime(2021, 11, 9, 14, 50, 24, 488, DateTimeKind.Local).AddTicks(4424),
                             Name = "C#",
                             Note = "C# Blog Kategorisi"
                         },
@@ -169,12 +169,12 @@ namespace Project.DAL.Migrations
                         {
                             ID = 2,
                             CreatedByName = "InitialCreate",
-                            CreatedDate = new DateTime(2021, 11, 7, 11, 0, 51, 875, DateTimeKind.Local).AddTicks(3298),
+                            CreatedDate = new DateTime(2021, 11, 9, 14, 50, 24, 488, DateTimeKind.Local).AddTicks(5485),
                             Description = "C++ Programlama ile İlgili En Güncel Bilgiler",
                             IsActive = true,
                             IsDeleted = false,
                             ModifiedByName = "InitialCreate",
-                            ModifiedDate = new DateTime(2021, 11, 7, 11, 0, 51, 875, DateTimeKind.Local).AddTicks(3300),
+                            ModifiedDate = new DateTime(2021, 11, 9, 14, 50, 24, 488, DateTimeKind.Local).AddTicks(5487),
                             Name = "C++",
                             Note = "C++ Blog Kategorisi"
                         },
@@ -182,12 +182,12 @@ namespace Project.DAL.Migrations
                         {
                             ID = 3,
                             CreatedByName = "InitialCreate",
-                            CreatedDate = new DateTime(2021, 11, 7, 11, 0, 51, 875, DateTimeKind.Local).AddTicks(3304),
+                            CreatedDate = new DateTime(2021, 11, 9, 14, 50, 24, 488, DateTimeKind.Local).AddTicks(5492),
                             Description = "JavaScript Programlama ile İlgili En Güncel Bilgiler",
                             IsActive = true,
                             IsDeleted = false,
                             ModifiedByName = "InitialCreate",
-                            ModifiedDate = new DateTime(2021, 11, 7, 11, 0, 51, 875, DateTimeKind.Local).AddTicks(3305),
+                            ModifiedDate = new DateTime(2021, 11, 9, 14, 50, 24, 488, DateTimeKind.Local).AddTicks(5493),
                             Name = "JavaScript",
                             Note = "JavaScript Blog Kategorisi"
                         });
@@ -273,14 +273,14 @@ namespace Project.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "09f19a0c-4963-48dd-8fb7-0c95079b8de7",
+                            ConcurrencyStamp = "d8770d96-75b7-4958-b9ee-a069716dfd9c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "04a67922-269b-4523-8994-581211e21887",
+                            ConcurrencyStamp = "fcf54a7a-e089-4841-a892-e5ff326597fa",
                             Name = "Editor",
                             NormalizedName = "EDITOR"
                         });
@@ -385,17 +385,17 @@ namespace Project.DAL.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "de76da7d-01dd-4d2d-8e69-ab919c792dce",
+                            ConcurrencyStamp = "206e9df0-f9ad-4a5c-83fa-ff367401b4a5",
                             Email = "adminuser@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMINUSER@GMAIL.COM",
                             NormalizedUserName = "ADMINUSER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGuV2ecovHcmMR2QgH3nYGSBuFkh0SLp8ySnLBueEuMloqoulgLTgfMoSj9rZTTVAA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENKVU2Mka/mooanXI4bYeU/zI4cxlNMCZ4EcvMg1wgwGzQImqvFAOZrfS4mBf8FdDg==",
                             PhoneNumber = "+905555555",
                             PhoneNumberConfirmed = true,
                             Picture = "profile.jpg",
-                            SecurityStamp = "aafe1518-1cfe-46f5-b8b2-4e7b1ca79a9f",
+                            SecurityStamp = "87ea7813-99d6-4e47-89b7-f4fbedb12029",
                             TwoFactorEnabled = false,
                             UserName = "adminuser"
                         },
@@ -403,17 +403,17 @@ namespace Project.DAL.Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4b60fc45-5083-46d9-b67e-befe047519b7",
+                            ConcurrencyStamp = "fa67b86b-daa5-410f-9c1e-5248aa153d87",
                             Email = "editoruser@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADITORUSER@GMAIL.COM",
                             NormalizedUserName = "ADITORUSER",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJOtUdMti8COcAVMhS7fnwPgOiH32G9bZM6vpIz/bwS+kniX5dSH9XMr15fZ5AGujw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBoPqnGH2zXljD8GSRJtFHBntMXYzpewbhLpr718wooK6gxDsv8egX8K6Rfba1mfyA==",
                             PhoneNumber = "+905555555",
                             PhoneNumberConfirmed = true,
                             Picture = "profile.jpg",
-                            SecurityStamp = "ad081ca1-014e-45b7-a399-d3b10b45e0ea",
+                            SecurityStamp = "4fa99239-c708-48cb-bedf-326f8a2b5d7e",
                             TwoFactorEnabled = false,
                             UserName = "editoruser"
                         });

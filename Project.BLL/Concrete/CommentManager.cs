@@ -22,7 +22,7 @@ namespace Project.BLL.Concrete
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<IDataResult<int>> Count()
+        public async Task<IDataResult<int>> CountAsync()
         {
             var commentsCount = await _unitOfWork.Comments.CountAsync();
             if (commentsCount > -1)
@@ -35,7 +35,7 @@ namespace Project.BLL.Concrete
             }
         }
 
-        public async Task<IDataResult<int>> CountByIsDeleted()
+        public async Task<IDataResult<int>> CountByNonDeletedAsync()
         {
             var commentsCount = await _unitOfWork.Comments.CountAsync(c=>!c.IsDeleted);
             if (commentsCount > -1)

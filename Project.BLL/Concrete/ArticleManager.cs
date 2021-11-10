@@ -25,7 +25,7 @@ namespace Project.BLL.Concrete
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<IResult> Add(ArticleAddDto articleAddDto, string createdByName)
+        public async Task<IResult> AddAsync(ArticleAddDto articleAddDto, string createdByName)
         {
             var article = _mapper.Map<Article>(articleAddDto);
             article.CreatedByName = createdByName;
@@ -34,10 +34,10 @@ namespace Project.BLL.Concrete
 
             await _unitOfWork.Articles.AddAsync(article);
             await _unitOfWork.SaveAsync();
-            return new Result(ResultStatus.Success, Messages.Article.Add(articleAddDto.Title));
+            return new Result(ResultStatus.Success, Messages.Article.AddAsync(articleAddDto.Title));
         }
 
-        public async Task<IDataResult<int>> Count()
+        public async Task<IDataResult<int>> CountAsync()
         {
             var articlesCount = await _unitOfWork.Articles.CountAsync();
             if(articlesCount > -1)
@@ -50,7 +50,7 @@ namespace Project.BLL.Concrete
             }
         }
 
-        public async Task<IDataResult<int>> CountByIsDeleted()
+        public async Task<IDataResult<int>> CountByNonDeletedAsync()
         {
             var articlesCount = await _unitOfWork.Articles.CountAsync(a=>!a.IsDeleted);
             if (articlesCount > -1)
@@ -63,7 +63,7 @@ namespace Project.BLL.Concrete
             }
         }
 
-        public async Task<IResult> Delete(int articleID, string modifiedByName)
+        public async Task<IResult> DeleteAsync(int articleID, string modifiedByName)
         {
             var result = await _unitOfWork.Articles.AnyAsync(a => a.ID == articleID);
             if (result)
@@ -75,12 +75,12 @@ namespace Project.BLL.Concrete
 
                 await _unitOfWork.Articles.UpdateAsync(article);
                 await _unitOfWork.SaveAsync();
-                return new Result(ResultStatus.Success,Messages.Article.Delete(article.Title));
+                return new Result(ResultStatus.Success,Messages.Article.DeleteAsync(article.Title));
             }
             return new Result(ResultStatus.Error, Messages.Article.NotFound(isPlural:false));
         }
 
-        public async Task<IDataResult<ArticleDto>> Get(int articleID)
+        public async Task<IDataResult<ArticleDto>> GetAsync(int articleID)
         {
             var article = await _unitOfWork.Articles.GetAsync(a => a.ID == articleID, a => a.User, a => a.Category);
             if(article != null)
@@ -94,7 +94,7 @@ namespace Project.BLL.Concrete
             return new DataResult<ArticleDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural:false), null);
         }
 
-        public async Task<IDataResult<ArticleListDto>> GetAll()
+        public async Task<IDataResult<ArticleListDto>> GetAllAsync()
         {
             var articles = await _unitOfWork.Articles.GetAllAsync(null, a=>a.User, a => a.Category);
             if(articles.Count > -1)
@@ -107,7 +107,7 @@ namespace Project.BLL.Concrete
             return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: true), null);
         }
 
-        public async Task<IDataResult<ArticleListDto>> GetAllByCategory(int categoryID)
+        public async Task<IDataResult<ArticleListDto>> GetAllByCategoryAsync(int categoryID)
         {
             var result = await _unitOfWork.Categories.AnyAsync(c => c.ID == categoryID);
             if (result)
@@ -127,7 +127,7 @@ namespace Project.BLL.Concrete
 
         }
 
-        public async Task<IDataResult<ArticleListDto>> GetAllByNonDeleted()
+        public async Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAsync()
         {
             var articles = await _unitOfWork.Articles.GetAllAsync(a => !a.IsDeleted, a => a.User, a=>a.Category);
             if (articles.Count > -1)
@@ -141,7 +141,7 @@ namespace Project.BLL.Concrete
             return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: true), null);
         }
 
-        public async Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAndActive()
+        public async Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAndActiveAsync()
         {
             var articles = await _unitOfWork.Articles.GetAllAsync(a => !a.IsDeleted && a.IsActive, a => a.User, a => a.Category);
             if (articles.Count > -1)
@@ -155,7 +155,7 @@ namespace Project.BLL.Concrete
             return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: true), null);
         }
 
-        public async Task<IResult> HardDelete(int articleID)
+        public async Task<IResult> HardDeleteAsync(int articleID)
         {
             var result = await _unitOfWork.Articles.AnyAsync(a => a.ID == articleID);
             if (result)
@@ -165,12 +165,12 @@ namespace Project.BLL.Concrete
 
                 await _unitOfWork.Articles.DeleteAsync(article);
                 await _unitOfWork.SaveAsync();
-                return new Result(ResultStatus.Success,Messages.Article.HardDelete(article.Title));
+                return new Result(ResultStatus.Success,Messages.Article.HardDeleteAsync(article.Title));
             }
             return new Result(ResultStatus.Error, Messages.Article.NotFound(isPlural: false));
         }
 
-        public async Task<IResult> Update(ArticleUpdateDto articleUpdateDto, string modifiedByName)
+        public async Task<IResult> UpdateAsync(ArticleUpdateDto articleUpdateDto, string modifiedByName)
         {
             var article = _mapper.Map<Article>(articleUpdateDto);
             article.ModifiedByName = modifiedByName;
@@ -178,7 +178,7 @@ namespace Project.BLL.Concrete
 
             await _unitOfWork.Articles.UpdateAsync(article);
             await _unitOfWork.SaveAsync();
-            return new Result(ResultStatus.Success, Messages.Article.Update(articleUpdateDto.Title));
+            return new Result(ResultStatus.Success, Messages.Article.UpdateAsync(articleUpdateDto.Title));
         }
     }
 }

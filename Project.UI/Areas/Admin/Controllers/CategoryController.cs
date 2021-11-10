@@ -28,7 +28,7 @@ namespace Project.UI.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var result = await _categoryService.GetAllByNonDeleted();
+            var result = await _categoryService.GetAllByNonDeletedAsync();
             //if(result.ResultStatus == ResultStatus.Success)
             //{
             //    return View(result.Data);
@@ -46,7 +46,7 @@ namespace Project.UI.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _categoryService.Add(categoryAddDto, "Ceren Oztunc");
+                var result = await _categoryService.AddAsync(categoryAddDto, "Ceren Oztunc");
                 if(result.ResultStatus == ResultStatus.Success)
                 {
                     var categoryAddAjaxModel = JsonSerializer.Serialize(new CategoryAddAjaxViewModel
@@ -68,7 +68,7 @@ namespace Project.UI.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int categoryID)
         {
-            var result = await _categoryService.GetCategoryUpdateDto(categoryID);
+            var result = await _categoryService.GetCategoryUpdateDtoAsync(categoryID);
             if (result.ResultStatus == ResultStatus.Success)
             {
                 return PartialView("_CategoryUpdatePartial", result.Data);
@@ -83,7 +83,7 @@ namespace Project.UI.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _categoryService.Update(categoryUpdateDto, "Ceren Oztunc");
+                var result = await _categoryService.UpdateAsync(categoryUpdateDto, "Ceren Oztunc");
                 if (result.ResultStatus == ResultStatus.Success)
                 {
                     var categoryUpdateAjaxModel = JsonSerializer.Serialize(new CategoryUpdateAjaxViewModel
@@ -105,7 +105,7 @@ namespace Project.UI.Areas.Admin.Controllers
 
         public async Task<JsonResult> GetAllCategories()
         {
-            var result = await _categoryService.GetAllByNonDeleted();
+            var result = await _categoryService.GetAllByNonDeletedAsync();
             var categories = JsonSerializer.Serialize(result.Data, new JsonSerializerOptions
             {
                 ReferenceHandler = ReferenceHandler.Preserve
@@ -115,7 +115,7 @@ namespace Project.UI.Areas.Admin.Controllers
         [HttpPost]
         public async Task<JsonResult> Delete(int categoryID)
         {
-            var result = await _categoryService.Delete(categoryID, "Ceren Öztunç");
+            var result = await _categoryService.DeleteAsync(categoryID, "Ceren Öztunç");
             var deletedCategory = JsonSerializer.Serialize(result.Data);
             return Json(deletedCategory);
         }

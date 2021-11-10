@@ -39,10 +39,14 @@ namespace Project.SHARED.Data.Concrete.EntityFramework
 
         }
 
-        public async Task<IList<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<IList<T>> GetAllAsync(Expression<Func<T, bool>> predicate =null, params Expression<Func<T, object>>[] includeProperties)
         {
             IQueryable<T> query = _context.Set<T>();
-            query = query.Where(predicate);
+            if(predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+            
             
             if (includeProperties.Any())
             {

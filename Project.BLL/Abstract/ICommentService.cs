@@ -9,8 +9,8 @@ namespace Project.BLL.Abstract
 {
     public interface ICommentService
     {
-        Task<IDataResult<int>> Count();
-        Task<IDataResult<int>> CountByIsDeleted();
+        Task<IDataResult<int>> CountAsync();
+        Task<IDataResult<int>> CountByNonDeletedAsync();
 
     }
 }

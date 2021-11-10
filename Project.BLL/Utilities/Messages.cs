@@ -15,19 +15,19 @@ namespace Project.BLL.Utilities
                 if (isPlural) return "Hiçbir kategori bulunamadı.";
                 return "Böyle bir kategori bulunamadı.";
             }
-            public static string Add(string categoryName)
+            public static string AddAsync(string categoryName)
             {
                 return $"{categoryName} adlı kategori başarıyla eklenmiştir.";
             }
-            public static string Update(string categoryName)
+            public static string UpdateAsync(string categoryName)
             {
                 return $"{categoryName} adlı kategori başarıyla güncellenmiştir.";
             }
-            public static string Delete(string categoryName)
+            public static string DeleteAsync(string categoryName)
             {
                 return $"{categoryName} adlı kategori başarıyla silinmiştir.";
             }
-            public static string HardDelete(string categoryName)
+            public static string HardDeleteAsync(string categoryName)
             {
                 return $"{categoryName} adlı kategori başarıyla veritabanından silinmiştir.";
             }
@@ -39,19 +39,19 @@ namespace Project.BLL.Utilities
                 if (isPlural) return "Hiçbir makale bulunamadı.";
                 return "Böyle bir makale bulunamadı.";
             }
-            public static string Add(string articleName)
+            public static string AddAsync(string articleName)
             {
                 return $"{articleName} adlı kategori başarıyla eklenmiştir.";
             }
-            public static string Update(string articleName)
+            public static string UpdateAsync(string articleName)
             {
                 return $"{articleName} adlı kategori başarıyla güncellenmiştir.";
             }
-            public static string Delete(string articleName)
+            public static string DeleteAsync(string articleName)
             {
                 return $"{articleName} adlı kategori başarıyla silinmiştir.";
             }
-            public static string HardDelete(string articleName)
+            public static string HardDeleteAsync(string articleName)
             {
                 return $"{articleName} adlı kategori başarıyla veritabanından silinmiştir.";
             }

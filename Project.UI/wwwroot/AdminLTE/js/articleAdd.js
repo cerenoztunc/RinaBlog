@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+    // Trumbowgy
     $('#text-editor').trumbowyg({
         btns: [
             ['viewHTML'],
@@ -17,5 +18,12 @@
             ['emoji'],
             ['fontfamily'],
             ['fontsize']
-        ]});
+        ]
+    });
+
+    $('#categoryList').select2({
+        theme: 'bootstrap4',
+        placeholder: "Lütfen bir kategori seçiniz...",
+        allowClear: true
+    });
 });

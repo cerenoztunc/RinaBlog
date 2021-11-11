@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Project.BLL</name>
+    </assembly>
+    <members>
+        <member name="M:Project.BLL.Abstract.ICategoryService.GetCategoryUpdateDtoAsync(System.Int32)">
+            <summary>
+            Verilen ID parametresine ait kategorinin CategoryUpdateDto temsilini geriye döner.
+            </summary>
+            <param name="categoryID"></param>
+            <returns>Asenkron bir operasyon ile Task olarak işlem sonucu DataResult tipinde geriye döner.</returns>
+        </member>
+        <member name="M:Project.BLL.Abstract.ICategoryService.AddAsync(Project.ENTITIES.DTOs.CategoryAddDto,System.String)">
+            <summary>
+            Verilen CategoryAddDto ve CreatedByName parametrelerine ait bilgiler ile yeni bir Category ekler.
+            </summary>
+            <param name="categoryAddDto"></param>
+            <param name="createdByName"></param>
+            <returns>Asenkron bir operasyon ile Task olarak ekleme işleminin sonucunu DataResult tipinde döner.</returns>
+        </member>
+        <member name="M:Project.BLL.Concrete.CategoryManager.AddAsync(Project.ENTITIES.DTOs.CategoryAddDto,System.String)">
+            <summary>
+            Verilen CategoryAddDto ve CreatedByName parametrelerine ait bilgiler ile yeni bir Category ekler.
+            </summary>
+            <param name="categoryAddDto"></param>
+            <param name="createdByName"></param>
+            <returns>Asenkron bir operasyon ile Task olarak ekleme işleminin sonucunu DataResult tipinde döner.</returns>
+        </member>
+        <member name="M:Project.BLL.Concrete.CategoryManager.GetCategoryUpdateDtoAsync(System.Int32)">
+            <summary>
+            Verilen ID parametresine ait kategorinin CategoryUpdateDto temsilini geriye döner.
+            </summary>
+            <param name="categoryID"></param>
+            <returns>Asenkron bir operasyon ile Task olarak işlem sonucu DataResult tipinde geriye döner.</returns>
+        </member>
+    </members>
+</doc>

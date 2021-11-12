@@ -115,10 +115,10 @@
         event.preventDefault();
         const id = $(this).attr('data-id');
         const tableRow = $(`[name="${id}"]`);
-        const userName = tableRow.find('td:eq(1)').text();
+        const articleTitle = tableRow.find('td:eq(2)').text();
         Swal.fire({
             title: 'Silmek istediğinize emin misiniz?',
-            text: `${userName} adlı kategori silinecektir!`,
+            text: `${articleTitle} başlıklı makale silinecektir!`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -130,14 +130,14 @@
                 $.ajax({
                     type: 'POST',
                     dataType: 'json',
-                    data: { userId: id },
-                    url: '/Admin/User/Delete/',
+                    data: { articleId: id },
+                    url: '/Admin/Article/Delete/',
                     success: function (data) {
-                        const userDto = jQuery.parseJSON(data);
-                        if (userDto.ResultStatus === 0) {
+                        const articleReult = jQuery.parseJSON(data);
+                        if (articleReult.ResultStatus === 0) {
                             Swal.fire(
                                 'Silindi!',
-                                `${userDto.User.UserName} adlı kullanıcı başarıyla silinmiştir!`,
+                                `${articleReult.Message} `,
                                 'success'
                             );
 
@@ -146,7 +146,7 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Oops...',
-                                text: `${userDto.Message}`
+                                text: `${articleReult.Message}`
                             });
                         }
                     },

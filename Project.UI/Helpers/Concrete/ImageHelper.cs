@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Project.ENTITIES.ComplexTypes;
 using Project.ENTITIES.DTOs;
 using Project.SHARED.Utilities.Extensions;
 using Project.SHARED.Utilities.Results.Abstract;
@@ -18,7 +19,9 @@ namespace Project.UI.Helpers.Concrete
     {
         private readonly IWebHostEnvironment _env;
         private readonly string _wwwroot;
-        private readonly string imgFolder = "img";
+        private const string imgFolder = "img";
+        private const string userImageFolder = "userImages";
+        private const string postImagesFolder = "postImages";
         public ImageHelper(IWebHostEnvironment env)
         {
             _env = env;
@@ -47,27 +50,41 @@ namespace Project.UI.Helpers.Concrete
             }
         }
 
-        public async Task<IDataResult<ImageUploadedDto>> UploadUserImage(string userName, IFormFile pictureFile, string folderName="userImages")
+        public async Task<IDataResult<ImageUploadedDto>> Upload(string name, IFormFile pictureFile, PictureTypes pictureTypes, string folderName=null)
         {
+            //folderName null gelirse resim tipine göre klasör adı ataması yapılır..
+            folderName ??= pictureTypes == PictureTypes.User ? userImageFolder : postImagesFolder;
+
+            //folderName değişkeni ile gelen klasör adı sistemde yoksa yeni klasör oluştuurlur...
             if (!Directory.Exists($"{_wwwroot}/{imgFolder}/{folderName}"))
             {
                 Directory.CreateDirectory($"{_wwwroot}/{imgFolder}/{folderName}");
             }
+            //resmin yüklenme sırasındaki ilk adı oldFilename adlı değişkene atanır..
             string oldFileName = Path.GetFileNameWithoutExtension(pictureFile.FileName);
 
-            //.png
+            //resmin uzantısı (.png, jpg vb.) fileExtension adlı değişkene atanır..
             string fileExtension = Path.GetExtension(pictureFile.FileName);
+
             DateTime dateTime = DateTime.Now;
+
+            //Parametreyle gelen değerler kullanılarak yeni bir resim adı oluşturulur
             //CerenOztunc_678_5_56_12_3_49_2021.png
-            string newFileName = $"{userName}_{dateTime.FullDateAndTimeStringWithUnderscore()}{fileExtension}";
+            string newFileName = $"{name}_{dateTime.FullDateAndTimeStringWithUnderscore()}{fileExtension}";
+
             //dosya adını nereye kaydedeceğimiz..
             var path = Path.Combine($"{_wwwroot}/{imgFolder}/{folderName}", newFileName);
 
+            //sistem için oluşturulan yeni dosya yoluna resim kopyalanır..
             await using (var stream = new FileStream(path, FileMode.Create))
             {
                 await pictureFile.CopyToAsync(stream);
             }
-            return new DataResult<ImageUploadedDto>(ResultStatus.Success, $"{userName} adlı kullanıcının resmi başarıyla yüklenmiştir.", 
+
+            //resim tipine göre kullanıcı mesajı oluşturulur..
+            string message = pictureTypes == PictureTypes.User ? $"{name} adlı kullanıcının resmi başarıyla yüklenmiştir." : $"{name} adlı makalenin resmi başarıyla yüklenmiştir.";
+
+            return new DataResult<ImageUploadedDto>(ResultStatus.Success,message , 
                 new ImageUploadedDto 
                 {
                     FullName = $"{folderName}/{newFileName}",

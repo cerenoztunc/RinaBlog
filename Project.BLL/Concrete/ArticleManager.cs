@@ -25,12 +25,12 @@ namespace Project.BLL.Concrete
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<IResult> AddAsync(ArticleAddDto articleAddDto, string createdByName)
+        public async Task<IResult> AddAsync(ArticleAddDto articleAddDto, string createdByName, int userId)
         {
             var article = _mapper.Map<Article>(articleAddDto);
             article.CreatedByName = createdByName;
             article.ModifiedByName = createdByName;
-            article.UserID = 1;
+            article.UserID = userId;
 
             await _unitOfWork.Articles.AddAsync(article);
             await _unitOfWork.SaveAsync();
@@ -172,13 +172,28 @@ namespace Project.BLL.Concrete
 
         public async Task<IResult> UpdateAsync(ArticleUpdateDto articleUpdateDto, string modifiedByName)
         {
-            var article = _mapper.Map<Article>(articleUpdateDto);
+            var oldArticle = await _unitOfWork.Articles.GetAsync(a => a.ID == articleUpdateDto.ID);
+            var article = _mapper.Map<ArticleUpdateDto, Article>(articleUpdateDto, oldArticle);
             article.ModifiedByName = modifiedByName;
-            article.UserID = 1;
 
             await _unitOfWork.Articles.UpdateAsync(article);
             await _unitOfWork.SaveAsync();
             return new Result(ResultStatus.Success, Messages.Article.UpdateAsync(articleUpdateDto.Title));
+        }
+
+        public async Task<IDataResult<ArticleUpdateDto>> GetArticleUpdateDtoAsync(int articleID)
+        {
+            var result = await _unitOfWork.Articles.AnyAsync(a => a.ID == articleID);
+            if (result)
+            {
+                var article = await _unitOfWork.Articles.GetAsync(a => a.ID == articleID);
+                var articleUpdateDto = _mapper.Map<ArticleUpdateDto>(article);
+                return new DataResult<ArticleUpdateDto>(ResultStatus.Success, articleUpdateDto);
+            }
+            else
+            {
+                return new DataResult<ArticleUpdateDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: false), null);
+            }
         }
     }
 }

@@ -49,6 +49,8 @@
             showMonthAfterYear: false,
             yearSuffix: "",
             duration: 1000,
+            showAnim: "drop",
+            showOptions: {direction:"up"},
             minDate: -3,
             maxDate: +3
         

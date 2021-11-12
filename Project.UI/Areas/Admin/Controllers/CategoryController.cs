@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Project.BLL.Abstract;
+using Project.ENTITIES.Concrete;
 using Project.ENTITIES.DTOs;
 using Project.SHARED.Utilities.Extensions;
 using Project.SHARED.Utilities.Results.ComplexTypes;
 using Project.UI.Areas.Admin.Models;
+using Project.UI.Helpers.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +21,11 @@ namespace Project.UI.Areas.Admin.Controllers
     [Area("Admin")]
     [Authorize(Roles = "Admin, Editor")]
 
-    public class CategoryController : Controller
+    public class CategoryController : BaseController
     {
         private readonly ICategoryService _categoryService;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService, UserManager<User> userManager, IMapper mapper, IImageHelper imageHelper):base(userManager, mapper, imageHelper)
         {
             _categoryService = categoryService;
         }
@@ -46,7 +50,7 @@ namespace Project.UI.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _categoryService.AddAsync(categoryAddDto, "Ceren Oztunc");
+                var result = await _categoryService.AddAsync(categoryAddDto, LoggedInUser.UserName);
                 if(result.ResultStatus == ResultStatus.Success)
                 {
                     var categoryAddAjaxModel = JsonSerializer.Serialize(new CategoryAddAjaxViewModel
@@ -83,7 +87,7 @@ namespace Project.UI.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _categoryService.UpdateAsync(categoryUpdateDto, "Ceren Oztunc");
+                var result = await _categoryService.UpdateAsync(categoryUpdateDto, LoggedInUser.UserName);
                 if (result.ResultStatus == ResultStatus.Success)
                 {
                     var categoryUpdateAjaxModel = JsonSerializer.Serialize(new CategoryUpdateAjaxViewModel
@@ -115,7 +119,7 @@ namespace Project.UI.Areas.Admin.Controllers
         [HttpPost]
         public async Task<JsonResult> Delete(int categoryID)
         {
-            var result = await _categoryService.DeleteAsync(categoryID, "Ceren Öztunç");
+            var result = await _categoryService.DeleteAsync(categoryID, LoggedInUser.UserName);
             var deletedCategory = JsonSerializer.Serialize(result.Data);
             return Json(deletedCategory);
         }

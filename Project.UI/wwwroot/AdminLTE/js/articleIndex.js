@@ -27,47 +27,68 @@
                 action: function (e, dt, node, config) {
                     $.ajax({
                         type: 'GET',
-                        url: '/Admin/User/GetAllUsers/',
+                        url: '/Admin/Article/GetAllArticles/',
                         contentType: 'application/json',
                         beforeSend: function () {
-                            $('#usersTable').hide(); //table'ı gizledik ve
+                            $('#articlesTable').hide(); //table'ı gizledik ve
                             $('.spinner-border').show(); //table'ın hemen üstüne koyduğumuz yükleniyor görselini görünür hale getirdik
                         },
                         success: function (data) {
-                            const userListDto = jQuery.parseJSON(data);
+                            const articleResult = jQuery.parseJSON(data);
                             dataTable.clear();
-                            if (userListDto.ResultStatus === 0) {
-                                $.each(userListDto.Users.$values, function (index, user) {
+                            console.log(articleResult);
+                            if (articleResult.Data.ResultStatus === 0) {
+                                let categoriesArray = [];
+                                $.each(articleResult.Data.Articles.$values, function (index, article) {
+                                    const newArticle = getJsonNetObject(article, articleResult.Data.Articles.$values);
+                                    let newCategory = getJsonNetObject(newArticle.Category, newArticle);
+                                    if (newCategory !== null) {
+                                        categoriesArray.push(newCategory);
+                                    }
+                                    if (newCategory === null) {
+                                        newCategory = categoriesArray.find((category) => {
+                                            return category.$id === newArticle.Category.$ref;
+                                        })
+                                    }
+                                    console.log(newArticle);
+                                    console.log(newCategory);
                                     const newTableRow = dataTable.row.add([
-                                        user.Id,
-                                        user.UserName,
-                                        user.Email,
-                                        user.PhoneNumber,
-                                        `<img src="/img/${user.Picture}" alt="${user.UserName}" class = "my-image-table" />`,
-                                        
-                                    `<button class="btn btn-primary btn-sm btn-update" data-id="${user.Id}">
+                                        newArticle.ID,
+                                        newArticle.Category.Name,
+                                        newArticle.Title,
+                                        `<img src="/img/${newArticle.Thumbnail}" alt="${newArticle.Title}" class = "my-image-table" />`,
+                                        `${convertToShortDate(newArticle.Date)}`,
+                                        newArticle.ViewsCount,
+                                        newArticle.CommentCount,
+                                        `${article.IsActive ? "Evet" : "Hayır"}`,
+                                        `${article.IsDeleted ? "Evet" : "Hayır"}`,
+                                        `${convertToShortDate(newArticle.CreatedDate)}`,
+                                        newArticle.CreatedByName,
+                                        `${convertToShortDate(newArticle.ModifiedDate)}`,
+                                        newArticle.ModifiedByName,
+                                    `<button class="btn btn-primary btn-sm btn-update" data-id="${newArticle.ID}">
                                         <span class="fas fa-edit"></span>
                                     </button>
-                                    <button class="btn btn-danger btn-sm btn-delete" data-id="${user.Id}">
+                                    <button class="btn btn-danger btn-sm btn-delete" data-id="${newArticle.ID}">
                                         <span class="fas fa-minus-circle"></span>
                                     </button>`
                             
                                     ]).node();
                                     const jqueryTableRow = $(newTableRow);
-                                    jqueryTableRow.attr('name', `${user.Id}`);
+                                    jqueryTableRow.attr('name', `${newArticle.ID}`);
                                 });
                                 dataTable.draw();
                                 $('.spinner-border').hide();
-                                $('#usersTable').fadeIn(1400);
+                                $('#articlesTable').fadeIn(1400);
                             } else {
-                                toastr.error(`${userListDto.Message}`, 'İşlem Başarısız!');
+                                toastr.error(`${articleResult.Data.Message}`, 'İşlem Başarısız!');
                             }
 
                         },
                         error: function (err) {
                             console.log(err);
                             $('.spinner-border').hide();
-                            $('#usersTable').fadeIn(1000);
+                            $('#articlesTable').fadeIn(1000);
                             toastr.error(`${err.responseText}`, 'Hata!');
                         }
                     });

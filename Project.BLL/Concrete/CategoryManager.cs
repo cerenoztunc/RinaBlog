@@ -2,6 +2,7 @@
 using Project.BLL.Abstract;
 using Project.BLL.Utilities;
 using Project.DAL.Abstract;
+using Project.DAL.Concrete;
 using Project.ENTITIES.Concrete;
 using Project.ENTITIES.DTOs;
 using Project.SHARED.Utilities.Results.Abstract;
@@ -15,15 +16,11 @@ using System.Threading.Tasks;
 
 namespace Project.BLL.Concrete
 {
-    public class CategoryManager : ICategoryService
+    public class CategoryManager : ManagerBase, ICategoryService
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public CategoryManager(IUnitOfWork unitOfWork, IMapper mapper)
+        
+        public CategoryManager(IUnitOfWork unitOfWork, IMapper mapper):base(unitOfWork,mapper)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
         /// <summary>
         /// Verilen CategoryAddDto ve CreatedByName parametrelerine ait bilgiler ile yeni bir Category ekler.
@@ -33,12 +30,12 @@ namespace Project.BLL.Concrete
         /// <returns>Asenkron bir operasyon ile Task olarak ekleme işleminin sonucunu DataResult tipinde döner.</returns>
         public async Task<IDataResult<CategoryDto>> AddAsync(CategoryAddDto categoryAddDto, string createdByName)
         {
-            var category = _mapper.Map<Category>(categoryAddDto);
+            var category = Mapper.Map<Category>(categoryAddDto);
             category.CreatedByName = createdByName;
             category.ModifiedByName = createdByName;
-            var addedCategory = await _unitOfWork.Categories.AddAsync(category);
+            var addedCategory = await UnitOfWork.Categories.AddAsync(category);
 
-            await _unitOfWork.SaveAsync();
+            await UnitOfWork.SaveAsync();
 
             return new DataResult<CategoryDto>(ResultStatus.Success, Messages.Category.AddAsync(addedCategory.Name), new CategoryDto 
             { 
@@ -50,7 +47,7 @@ namespace Project.BLL.Concrete
 
         public async Task<IDataResult<int>> CountAsync()
         {
-            var categoriesCount = await _unitOfWork.Categories.CountAsync();
+            var categoriesCount = await UnitOfWork.Categories.CountAsync();
             if (categoriesCount > -1)
             {
                 return new DataResult<int>(ResultStatus.Success, categoriesCount);
@@ -63,7 +60,7 @@ namespace Project.BLL.Concrete
 
         public async Task<IDataResult<int>> CountByNonDeletedAsync()
         {
-            var categoriesCount = await _unitOfWork.Categories.CountAsync(c=>!c.IsDeleted);
+            var categoriesCount = await UnitOfWork.Categories.CountAsync(c=>!c.IsDeleted);
             if (categoriesCount > -1)
             {
                 return new DataResult<int>(ResultStatus.Success, categoriesCount);
@@ -76,16 +73,16 @@ namespace Project.BLL.Concrete
 
         public async Task<IDataResult<CategoryDto>> DeleteAsync(int categoryID, string modifiedByName)
         {
-            var category = await _unitOfWork.Categories.GetAsync(c => c.ID == categoryID);
+            var category = await UnitOfWork.Categories.GetAsync(c => c.ID == categoryID);
             if (category != null)
             {
                 category.IsDeleted = true;
                 category.ModifiedByName = modifiedByName;
                 category.ModifiedDate = DateTime.Now;
 
-                var deletedCategory = await _unitOfWork.Categories.UpdateAsync(category);
+                var deletedCategory = await UnitOfWork.Categories.UpdateAsync(category);
 
-                await _unitOfWork.SaveAsync();
+                await UnitOfWork.SaveAsync();
 
                 return new DataResult<CategoryDto>(ResultStatus.Success, Messages.Category.DeleteAsync(deletedCategory.Name), new CategoryDto
                 {
@@ -104,7 +101,7 @@ namespace Project.BLL.Concrete
 
         public async Task<IDataResult<CategoryDto>> GetAsync(int categoryID)
         {
-            var category = await _unitOfWork.Categories.GetAsync(c => c.ID == categoryID);
+            var category = await UnitOfWork.Categories.GetAsync(c => c.ID == categoryID);
             if(category != null)
             {
                 return new DataResult<CategoryDto>(ResultStatus.Success, new CategoryDto 
@@ -124,7 +121,7 @@ namespace Project.BLL.Concrete
 
         public async Task<IDataResult<CategoryListDto>> GetAllAsync()
         {
-            var categories = await _unitOfWork.Categories.GetAllAsync(null);
+            var categories = await UnitOfWork.Categories.GetAllAsync(null);
             if (categories.Count > -1)
             {
                 return new DataResult<CategoryListDto>(ResultStatus.Success, new CategoryListDto { 
@@ -143,7 +140,7 @@ namespace Project.BLL.Concrete
 
         public async Task<IDataResult<CategoryListDto>> GetAllByNonDeletedAsync()
         {
-            var categories = await _unitOfWork.Categories.GetAllAsync(c=>!c.IsDeleted);
+            var categories = await UnitOfWork.Categories.GetAllAsync(c=>!c.IsDeleted);
             
             if (categories.Count > -1)
             {
@@ -164,7 +161,7 @@ namespace Project.BLL.Concrete
 
         public async Task<IDataResult<CategoryListDto>> GetAllByNonDeletedAndActiveAsync()
         {
-            var categories = await _unitOfWork.Categories.GetAllAsync(c => !c.IsDeleted && c.IsActive);
+            var categories = await UnitOfWork.Categories.GetAllAsync(c => !c.IsDeleted && c.IsActive);
             if (categories.Count > -1)
             {
                 return new DataResult<CategoryListDto>(ResultStatus.Success, new CategoryListDto
@@ -183,11 +180,11 @@ namespace Project.BLL.Concrete
         /// <returns>Asenkron bir operasyon ile Task olarak işlem sonucu DataResult tipinde geriye döner.</returns>
         public async Task<IDataResult<CategoryUpdateDto>> GetCategoryUpdateDtoAsync(int categoryID)
         {
-            var result = await _unitOfWork.Categories.AnyAsync(c => c.ID == categoryID);
+            var result = await UnitOfWork.Categories.AnyAsync(c => c.ID == categoryID);
             if (result)
             {
-                var category = await _unitOfWork.Categories.GetAsync(c => c.ID == categoryID);
-                var categoryUpdateDto = _mapper.Map<CategoryUpdateDto>(category);
+                var category = await UnitOfWork.Categories.GetAsync(c => c.ID == categoryID);
+                var categoryUpdateDto = Mapper.Map<CategoryUpdateDto>(category);
                 return new DataResult<CategoryUpdateDto>(ResultStatus.Success, categoryUpdateDto);
             }
             else
@@ -198,12 +195,12 @@ namespace Project.BLL.Concrete
 
         public async Task<IResult> HardDeleteAsync(int categoryID)
         {
-            var category = await _unitOfWork.Categories.GetAsync(c => c.ID == categoryID);
+            var category = await UnitOfWork.Categories.GetAsync(c => c.ID == categoryID);
             if (category != null)
             {
                
-                await _unitOfWork.Categories.DeleteAsync(category);
-                await _unitOfWork.SaveAsync();
+                await UnitOfWork.Categories.DeleteAsync(category);
+                await UnitOfWork.SaveAsync();
 
                 return new Result(ResultStatus.Success, Messages.Category.HardDeleteAsync(category.Name));
             }
@@ -212,12 +209,12 @@ namespace Project.BLL.Concrete
 
         public async Task<IDataResult<CategoryDto>> UpdateAsync(CategoryUpdateDto categoryUpdateDto, string modifiedByName)
         {
-            var oldCategory = await _unitOfWork.Categories.GetAsync(c => c.ID == categoryUpdateDto.ID);
-            var category = _mapper.Map<CategoryUpdateDto,Category>(categoryUpdateDto,oldCategory);
+            var oldCategory = await UnitOfWork.Categories.GetAsync(c => c.ID == categoryUpdateDto.ID);
+            var category = Mapper.Map<CategoryUpdateDto,Category>(categoryUpdateDto,oldCategory);
             category.ModifiedByName = modifiedByName;
-            var updatedCategory = await _unitOfWork.Categories.UpdateAsync(category);
+            var updatedCategory = await UnitOfWork.Categories.UpdateAsync(category);
 
-            await _unitOfWork.SaveAsync();
+            await UnitOfWork.SaveAsync();
 
             return new DataResult<CategoryDto> (ResultStatus.Success, Messages.Category.UpdateAsync(updatedCategory.Name), new CategoryDto 
             { 

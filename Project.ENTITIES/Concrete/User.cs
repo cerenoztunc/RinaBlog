@@ -14,3 +14,5 @@ namespace Project.ENTITIES.Concrete
         public ICollection<Article> Articles { get; set; }
     }
 }
+
+    

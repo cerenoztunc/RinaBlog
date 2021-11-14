@@ -195,7 +195,9 @@
                 $.ajax({
                     type: 'POST',
                     dataType: 'json',
-                    data: { userId: id },
+                    data: {
+                        userId: id,
+                        },
                     url: '/Admin/User/Delete/',
                     success: function (data) {
                         const userDto = jQuery.parseJSON(data);
@@ -243,7 +245,7 @@
         placeHolderDiv.on('click',
             '#btnUpdate',
             function (event) {
-                event.preventDefault();
+                event.preventDefault(); 
 
                 const form = $('#form-user-update');
                 const actionUrl = form.attr('action');
@@ -262,6 +264,7 @@
                             const tableRow = $(`[name="${id}"]`);
                         }
                         const newFormBody = $('.modal-body', userUpdateAjaxModel.UserUpdatePartial);
+
                         placeHolderDiv.find('.modal-body').replaceWith(newFormBody);
                         const isValid = newFormBody.find('[name="IsValid"]').val() === 'True';
                         if (isValid) {

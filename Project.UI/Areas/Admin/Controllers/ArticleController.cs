@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NToastNotify;
@@ -30,7 +31,7 @@ namespace Project.UI.Areas.Admin.Controllers
             _categoryService = categoryService;
             _toastNotification = toastNotification;
         }
-
+        [Authorize(Roles = "SuperAdmin, Article.Read")]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -39,6 +40,7 @@ namespace Project.UI.Areas.Admin.Controllers
             return View(result.Data);
             return NotFound();
         }
+        [Authorize(Roles = "SuperAdmin, Article.Create")]
         [HttpGet]
         public async Task<IActionResult> Add()
         {
@@ -53,6 +55,7 @@ namespace Project.UI.Areas.Admin.Controllers
             return NotFound();
             
         }
+        [Authorize(Roles = "SuperAdmin, Article.Create")]
         [HttpPost]
         public async Task<IActionResult> Add(ArticleAddViewModel articleAddViewModel)
         {
@@ -81,6 +84,7 @@ namespace Project.UI.Areas.Admin.Controllers
             return View(articleAddViewModel);
 
         }
+        [Authorize(Roles = "SuperAdmin, Article.Update")]
         [HttpGet]
         public async Task<IActionResult> Update(int articleID)
         {
@@ -100,6 +104,7 @@ namespace Project.UI.Areas.Admin.Controllers
             }
 
         }
+        [Authorize(Roles = "SuperAdmin, Article.Update")]
         [HttpPost]
         public async Task<IActionResult> Update(ArticleUpdateViewModel articleUpdateViewModel)
         {
@@ -110,8 +115,8 @@ namespace Project.UI.Areas.Admin.Controllers
                 if(articleUpdateViewModel.ThumbnailFile != null)
                 {
                     var uploadedImageResult = await ImageHelper.Upload(articleUpdateViewModel.Title, articleUpdateViewModel.ThumbnailFile,PictureTypes.Post);
-                    articleUpdateViewModel.Thumbnail = uploadedImageResult.ResultStatus == ResultStatus.Success ? uploadedImageResult.Data.FullName : "postImages/profile.jpg";
-                    if(oldThumbnail != "postImages/profile.jpg")
+                    articleUpdateViewModel.Thumbnail = uploadedImageResult.ResultStatus == ResultStatus.Success ? uploadedImageResult.Data.FullName : "postImages/bremen.jpg";
+                    if(oldThumbnail != "postImages/bremen.jpg")
                     {
                         isNewThumbnailUploaded = true;
                     }
@@ -141,6 +146,7 @@ namespace Project.UI.Areas.Admin.Controllers
             articleUpdateViewModel.Categories = categories.Data.Categories;
             return View(articleUpdateViewModel);
         }
+        [Authorize(Roles = "SuperAdmin, Article.Delete")]
         [HttpPost]
         public async Task<JsonResult> Delete(int articleId)
         {
@@ -148,6 +154,7 @@ namespace Project.UI.Areas.Admin.Controllers
             var articleResult = JsonSerializer.Serialize(result);
             return Json(articleResult);
         }
+        [Authorize(Roles = "SuperAdmin, Article.Read")]
         [HttpGet]
         public async Task<JsonResult> GetAllArticles()
         {

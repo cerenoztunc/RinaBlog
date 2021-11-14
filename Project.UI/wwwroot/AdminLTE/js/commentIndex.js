@@ -9,15 +9,6 @@
             "<'row'<'col-sm-5'i><'col-sm-7'p>>",
         buttons: [
             {
-                text: 'Ekle',
-                attr: {
-                    id: "btnAdd",
-                },
-                className: 'btn btn-success',
-                action: function (e, dt, node, config) {
-                }
-            },
-            {
                 text: 'Yenile',
                 className: 'btn btn-warning',
                 action: function (e, dt, node, config) {
@@ -48,7 +39,7 @@
                                             });
                                         }
                                         const newTableRow = dataTable.row.add([
-                                            newComment.ID,
+                                            newComment.Id,
                                             newArticle.Title,
                                             newComment.Text.length > 75 ? newComment.Text.substring(0, 75) : newComment.Text,
                                             `${newComment.IsActive ? "Evet" : "Hayır"}`,
@@ -60,7 +51,7 @@
                                             getButtonsForDataTable(newComment)
                                         ]).node();
                                         const jqueryTableRow = $(newTableRow);
-                                        jqueryTableRow.attr('name', `${newComment.ID}`);
+                                        jqueryTableRow.attr('name', `${newComment.Id}`);
                                     });
                                 dataTable.draw();
                                 $('.spinner-border').hide();
@@ -138,7 +129,7 @@
                     $.ajax({
                         type: 'POST',
                         dataType: 'json',
-                        data: { commentID: id },
+                        data: { commentId: id },
                         url: '/Admin/Comment/Delete/',
                         success: function (data) {
                             const commentResult = jQuery.parseJSON(data);
@@ -178,7 +169,7 @@
             function (event) {
                 event.preventDefault();
                 const id = $(this).attr('data-id');
-                $.get(url, { commentID: id }).done(function (data) {
+                $.get(url, { commentId: id }).done(function (data) {
                     placeHolderDiv.html(data);
                     placeHolderDiv.find('.modal').modal('show');
                 }).fail(function (err) {
@@ -204,19 +195,15 @@
                     success: function (data) {
                         const commentUpdateAjaxModel = jQuery.parseJSON(data);
                         console.log(commentUpdateAjaxModel);
-                        //if (commentUpdateAjaxModel) {
-                        //    const id = commentUpdateAjaxModel.CommentDto.Comment.Id;
-                        //    const tableRow = $(`[name="${id}"]`);
-                        //}
-                        const id = commentUpdateAjaxModel.CommentDto.Comment.ID;
-                        const tableRow = $(`[name="${id}"]`);
                         const newFormBody = $('.modal-body', commentUpdateAjaxModel.CommentUpdatePartial);
                         placeHolderDiv.find('.modal-body').replaceWith(newFormBody);
                         const isValid = newFormBody.find('[name="IsValid"]').val() === 'True';
                         if (isValid) {
+                            const id = commentUpdateAjaxModel.CommentDto.Comment.Id;
+                            const tableRow = $(`[name="${id}"]`);
                             placeHolderDiv.find('.modal').modal('hide');
                             dataTable.row(tableRow).data([
-                                commentUpdateAjaxModel.CommentDto.Comment.ID,
+                                commentUpdateAjaxModel.CommentDto.Comment.Id,
                                 commentUpdateAjaxModel.CommentDto.Comment.Article.Title,
                                 commentUpdateAjaxModel.CommentDto.Comment.Text.length > 75 ? commentUpdateAjaxModel.CommentDto.Comment.Text.substring(0, 75) : commentUpdateAjaxModel.CommentDto.Comment.Text,
                                 `${commentUpdateAjaxModel.CommentDto.Comment.IsActive ? "Evet" : "Hayır"}`,
@@ -229,7 +216,7 @@
                             ]);
                             tableRow.attr("name", `${id}`);
                             dataTable.row(tableRow).invalidate();
-                            toastr.success(`${commentUpdateAjaxModel.CommentDto.Comment.ID} no'lu yorum başarıyla güncellenmiştir`, "Başarılı İşlem!");
+                            toastr.success(`${commentUpdateAjaxModel.CommentDto.Comment.Id} no'lu yorum başarıyla güncellenmiştir`, "Başarılı İşlem!");
                         } else {
                             let summaryText = "";
                             $('#validation-summary > ul > li').each(function () {
@@ -248,8 +235,10 @@
 
     });
 
-    // get detail ajax operations
-    $(function () {
+    // Get Detail Ajax Operation
+
+    $(function() {
+
         const url = '/Admin/Comment/GetDetail/';
         const placeHolderDiv = $('#modalPlaceHolder');
         $(document).on('click',
@@ -257,14 +246,16 @@
             function (event) {
                 event.preventDefault();
                 const id = $(this).attr('data-id');
-                $.get(url, { commentID: id }).done(function (data) {
+                $.get(url, { commentId: id }).done(function (data) {
                     placeHolderDiv.html(data);
                     placeHolderDiv.find('.modal').modal('show');
                 }).fail(function (err) {
                     toastr.error(`${err.responseText}`, 'Hata!');
                 });
             });
+
     });
+
     /* Ajax POST / Deleting a Comment starts from here */
 
     $(document).on('click',
@@ -289,16 +280,14 @@
                     $.ajax({
                         type: 'POST',
                         dataType: 'json',
-                        data: { commentID: id },
+                        data: { commentId: id },
                         url: '/Admin/Comment/Approve/',
                         success: function (data) {
                             const commentResult = jQuery.parseJSON(data);
                             console.log(commentResult);
                             if (commentResult.Data) {
-                                const placeHolderDiv = $('#modalPlaceHolder');
-                                placeHolderDiv.find('.modal').modal('hide');
                                 dataTable.row(tableRow).data([
-                                    commentResult.Data.Comment.ID,
+                                    commentResult.Data.Comment.Id,
                                     commentResult.Data.Comment.Article.Title,
                                     commentResult.Data.Comment.Text.length > 75 ? commentResult.Data.Comment.Text.substring(0, 75) : commentResult.Data.Comment.Text,
                                     `${commentResult.Data.Comment.IsActive ? "Evet" : "Hayır"}`,
@@ -313,7 +302,7 @@
                                 dataTable.row(tableRow).invalidate();
                                 Swal.fire(
                                     'Onaylandı!',
-                                    `${commentResult.Data.Comment.ID} no'lu yorum başarıyla onaylanmıştır.`,
+                                    `${commentResult.Data.Comment.Id} no'lu yorum başarıyla onaylanmıştır.`,
                                     'success'
                                 );
 
@@ -321,7 +310,7 @@
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Başarısız İşlem!',
-                                    text: `Beklenmedik bir hata ile karşılaşıldı..`,
+                                    text: `Beklenmedik bir hata ile karşılaşıldı.`,
                                 });
                             }
                         },
@@ -333,24 +322,23 @@
                 }
             });
         });
-
-
+    
     function getButtonsForDataTable(comment) {
         if (!comment.IsActive) {
             return `
-                                <button class="btn btn-warning btn-sm btn-approve" data-id="${comment.ID
+                                <button class="btn btn-warning btn-sm btn-approve" data-id="${comment.Id
                 }"><span class="fas fa-thumbs-up"></span></button>
-                                <button class="btn btn-info btn-sm btn-detail" data-id="${comment.ID
+                                <button class="btn btn-info btn-sm btn-detail" data-id="${comment.Id
                 }"><span class="fas fa-newspaper"></span></button>
-                                <button class="btn btn-primary btn-sm mt-1 btn-update" data-id="${comment.ID
+                                <button class="btn btn-primary btn-sm mt-1 btn-update" data-id="${comment.Id
                 }"><span class="fas fa-edit"></span></button>
-                                <button class="btn btn-danger btn-sm mt-1 btn-delete" data-id="${comment.ID
+                                <button class="btn btn-danger btn-sm mt-1 btn-delete" data-id="${comment.Id
                 }"><span class="fas fa-minus-circle"></span></button>
                                             `;
         }
-        return `<button class="btn btn-info btn-sm btn-detail" data-id="${comment.ID}"><span class="fas fa-newspaper"></span></button>
-                                <button class="btn btn-primary btn-sm mt-1 btn-update" data-id="${comment.ID}"><span class="fas fa-edit"></span></button>
-                                <button class="btn btn-danger btn-sm mt-1 btn-delete" data-id="${comment.ID}"><span class="fas fa-minus-circle"></span></button>`
+        return `<button class="btn btn-info btn-sm btn-detail" data-id="${comment.Id}"><span class="fas fa-newspaper"></span></button>
+                                <button class="btn btn-primary btn-sm mt-1 btn-update" data-id="${comment.Id}"><span class="fas fa-edit"></span></button>
+                                <button class="btn btn-danger btn-sm mt-1 btn-delete" data-id="${comment.Id}"><span class="fas fa-minus-circle"></span></button>`
 
 
     }

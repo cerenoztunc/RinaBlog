@@ -19,8 +19,6 @@ using System.Threading.Tasks;
 namespace Project.UI.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin, Editor")]
-
     public class CategoryController : BaseController
     {
         private readonly ICategoryService _categoryService;
@@ -29,7 +27,7 @@ namespace Project.UI.Areas.Admin.Controllers
         {
             _categoryService = categoryService;
         }
-
+        [Authorize(Roles = "SuperAdmin, Category.Read")]
         public async Task<IActionResult> Index()
         {
             var result = await _categoryService.GetAllByNonDeletedAsync();
@@ -39,12 +37,13 @@ namespace Project.UI.Areas.Admin.Controllers
             //} //Bu if controlüne gerek kalmadı artık. Çünkü Category managerda ihtiyacımız olan her şeyi result'ın içine attık. Bu sayede işlem başarılı da hatalı da dönse result.Data bunu içeriyor. Bu sayede artık tek bir view'de başarılı dönerse category'leri sıralayan bir tabloyu ya da hatalı dönerse bir hata mesajını gösterebiliyoruz..
             return View(result.Data);
         }
+        [Authorize(Roles = "SuperAdmin, Category.Create")]
         [HttpGet]
         public IActionResult Add()
         {
             return PartialView("_CategoryAddPartial");
         }
-
+        [Authorize(Roles = "SuperAdmin, Category.Create")]
         [HttpPost]
         public async Task<IActionResult> Add(CategoryAddDto categoryAddDto)
         {
@@ -69,6 +68,7 @@ namespace Project.UI.Areas.Admin.Controllers
             return Json(categoryAddAjaxErrorModel);
 
         }
+        [Authorize(Roles = "SuperAdmin, Category.Update")]
         [HttpGet]
         public async Task<IActionResult> Update(int categoryID)
         {
@@ -82,6 +82,7 @@ namespace Project.UI.Areas.Admin.Controllers
                 return NotFound();
             }
         }
+        [Authorize(Roles = "SuperAdmin, Category.Update")]
         [HttpPost]
         public async Task<IActionResult> Update(CategoryUpdateDto categoryUpdateDto)
         {
@@ -106,7 +107,7 @@ namespace Project.UI.Areas.Admin.Controllers
             return Json(categoryUpdateAjaxErrorModel);
 
         }
-
+        [Authorize(Roles = "SuperAdmin, Category.Read")]
         public async Task<JsonResult> GetAllCategories()
         {
             var result = await _categoryService.GetAllByNonDeletedAsync();
@@ -116,6 +117,7 @@ namespace Project.UI.Areas.Admin.Controllers
             });
             return Json(categories);
         }
+        [Authorize(Roles = "SuperAdmin, Category.Delete")]
         [HttpPost]
         public async Task<JsonResult> Delete(int categoryID)
         {

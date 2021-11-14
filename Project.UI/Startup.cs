@@ -43,8 +43,8 @@ namespace Project.UI
             services.AddScoped<IImageHelper, ImageHelper>();
             services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = new PathString("/Admin/User/Login"); 
-                options.LogoutPath = new PathString("/Admin/User/Logout");
+                options.LoginPath = new PathString("/Admin/Auth/Login"); 
+                options.LogoutPath = new PathString("/Admin/Auth/Logout");
                 options.Cookie = new CookieBuilder
                 {
                     Name = "RinaBlog",
@@ -54,7 +54,7 @@ namespace Project.UI
                 };
                 options.SlidingExpiration = true; //giriþ yapan kullanýcýlara verilen zaman
                 options.ExpireTimeSpan = System.TimeSpan.FromDays(7); // Kullanýcý 7 gün boyunca giriþli kalýr
-                options.AccessDeniedPath = new PathString("/Admin/User/AccessDenied"); //yetkisiz giriþler
+                options.AccessDeniedPath = new PathString("/Admin/Auth/AccessDenied"); //yetkisiz giriþler
             });
         }
 

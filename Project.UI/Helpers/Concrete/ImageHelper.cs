@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Project.UI.Helpers.Concrete
@@ -65,6 +66,10 @@ namespace Project.UI.Helpers.Concrete
 
             //resmin uzantısı (.png, jpg vb.) fileExtension adlı değişkene atanır..
             string fileExtension = Path.GetExtension(pictureFile.FileName);
+
+            //resmin adında istenmeyen karakterlerin kaldırılması)
+            Regex regex = new Regex("[*'\",._&#^@]");
+            name = regex.Replace(name, string.Empty);
 
             DateTime dateTime = DateTime.Now;
 

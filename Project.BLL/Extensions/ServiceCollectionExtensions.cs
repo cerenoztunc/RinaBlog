@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Project.BLL.Abstract;
 using Project.BLL.Concrete;
@@ -32,6 +33,10 @@ namespace Project.BLL.Extensions
                 options.User.RequireUniqueEmail = true;
 
             }).AddEntityFrameworkStores<RinaBlogContext>();
+            serviceCollection.Configure<SecurityStampValidatorOptions>(options =>
+            {
+                options.ValidationInterval = TimeSpan.FromMinutes(15);
+            });
             serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>(); //Eğer biri senden IUnitOfWork isterse UnitOfWork demiş olduk..Buradaki scoped olarak eklememizin sebebi dbcontext'in de özünde scope olmasıdır..Scoped her request'te nesnesinin tekrar oluşmasını ve bir request içerisinde sadece bir tane nesne kullanılmasını sağlar. 
             serviceCollection.AddScoped<ICategoryService, CategoryManager>();
             serviceCollection.AddScoped<IArticleService, ArticleManager>();

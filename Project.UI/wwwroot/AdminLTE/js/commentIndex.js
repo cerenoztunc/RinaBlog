@@ -137,7 +137,7 @@
                             if (commentResult.Data) {
                                 Swal.fire(
                                     'Silindi!',
-                                    `${commentResult.Message}`,
+                                    `${commentResult.Data.Comment.ID} no'lu yorum başarıyla silinmiştir.`,
                                     'success'
                                 );
 
@@ -146,7 +146,7 @@
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Başarısız İşlem!',
-                                    text: `${commentResult.Message}`,
+                                    text: `Beklenmedik bir hata oluştu.`,
                                 });
                             }
                         },
@@ -256,7 +256,7 @@
 
     });
 
-    /* Ajax POST / Deleting a Comment starts from here */
+    /* Ajax POST / Approving a Comment starts from here */
 
     $(document).on('click',
         '.btn-approve',

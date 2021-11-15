@@ -165,6 +165,42 @@ namespace Project.UI.Areas.Admin.Controllers
             });
             return Json(articleResult);
         }
+        [Authorize(Roles = "SuperAdmin, Article.Read")]
+        [HttpGet]
+        public async Task<IActionResult> DeletedArticles()
+        {
+            var result = await _articleService.GetAllByDeletedAsync();
+            return View(result.Data);
+        }
+        [Authorize(Roles = "SuperAdmin, Article.Read")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllDeletedArticles()
+        {
+            var result = await _articleService.GetAllByDeletedAsync();
+            var articles = JsonSerializer.Serialize(result, new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
+            return Json(articles);
+        }
+        [Authorize(Roles = "SuperAdmin, Article.Update")]
+        [HttpPost]
+        public async Task<JsonResult> UndoDelete(int articleId)
+        {
+            var result = await _articleService.UndoDeleteAsync(articleId, LoggedInUser.UserName);
+            var undoDeletedArticleResult = JsonSerializer.Serialize(result);
+            return Json(undoDeletedArticleResult);
+        }
+        [Authorize(Roles = "SuperAdmin, Article.Delete")]
+        [HttpPost]
+        public async Task<JsonResult> HardDelete(int articleId)
+        {
+            var result = await _articleService.HardDeleteAsync(articleId);
+            var hardDeletedArticleResult = JsonSerializer.Serialize(result);
+            return Json(hardDeletedArticleResult);
+        }
+
+
 
     }
 }

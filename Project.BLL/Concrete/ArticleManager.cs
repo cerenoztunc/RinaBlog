@@ -65,6 +65,7 @@ namespace Project.BLL.Concrete
             {
                 var article = await UnitOfWork.Articles.GetAsync(a => a.ID == articleID);
                 article.IsDeleted = true;
+                article.IsActive = false;
                 article.ModifiedByName = modifiedByName;
                 article.ModifiedDate = DateTime.Now;
 
@@ -189,6 +190,38 @@ namespace Project.BLL.Concrete
             {
                 return new DataResult<ArticleUpdateDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: false), null);
             }
+        }
+
+        public async Task<IDataResult<ArticleListDto>> GetAllByDeletedAsync()
+        {
+            var articles = await UnitOfWork.Articles.GetAllAsync(a => a.IsDeleted, a => a.User, a => a.Category);
+            if (articles.Count > -1)
+            {
+                return new DataResult<ArticleListDto>(ResultStatus.Success, new ArticleListDto
+                {
+                    Articles = articles,
+                    ResultStatus = ResultStatus.Success
+                });
+            }
+            return new DataResult<ArticleListDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: true), null);
+        }
+
+        public async Task<IResult> UndoDeleteAsync(int articleID, string modifiedByName)
+        {
+            var result = await UnitOfWork.Articles.AnyAsync(a => a.ID == articleID);
+            if (result)
+            {
+                var article = await UnitOfWork.Articles.GetAsync(a => a.ID == articleID);
+                article.IsDeleted = false;
+                article.IsActive = true;
+                article.ModifiedByName = modifiedByName;
+                article.ModifiedDate = DateTime.Now;
+
+                await UnitOfWork.Articles.UpdateAsync(article);
+                await UnitOfWork.SaveAsync();
+                return new Result(ResultStatus.Success, Messages.Article.UndoDelete(article.Title));
+            }
+            return new Result(ResultStatus.Error, Messages.Article.NotFound(isPlural: false));
         }
     }
 }

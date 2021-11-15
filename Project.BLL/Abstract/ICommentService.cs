@@ -20,6 +20,7 @@ namespace Project.BLL.Abstract
         Task<IDataResult<CommentDto>> ApproveAsync(int commentID, string modifiedByName);
         Task<IDataResult<CommentDto>> UpdateAsync(CommentUpdateDto commentUpdateDto, string modifiedByName);
         Task<IDataResult<CommentDto>> DeleteAsync(int commentID, string modifiedByName);
+        Task<IDataResult<CommentDto>> UndoDeleteAsync(int commentID, string modifiedByName);
         Task<IResult> HardDeleteAsync(int commentID);
         Task<IDataResult<int>> CountAsync();
         Task<IDataResult<int>> CountByNonDeletedAsync();

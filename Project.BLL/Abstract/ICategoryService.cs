@@ -20,6 +20,7 @@ namespace Project.BLL.Abstract
         Task<IDataResult<CategoryUpdateDto>> GetCategoryUpdateDtoAsync(int categoryID);
         Task<IDataResult<CategoryListDto>> GetAllAsync();
         Task<IDataResult<CategoryListDto>> GetAllByNonDeletedAsync();
+        Task<IDataResult<CategoryListDto>> GetAllByDeletedAsync();
         Task<IDataResult<CategoryListDto>> GetAllByNonDeletedAndActiveAsync();
         /// <summary>
         /// Verilen CategoryAddDto ve CreatedByName parametrelerine ait bilgiler ile yeni bir Category ekler.
@@ -30,6 +31,7 @@ namespace Project.BLL.Abstract
         Task<IDataResult<CategoryDto>> AddAsync(CategoryAddDto categoryAddDto, string createdByName);
         Task<IDataResult<CategoryDto>> UpdateAsync(CategoryUpdateDto categoryUpdateDto, string modifiedByName);
         Task<IDataResult<CategoryDto>> DeleteAsync(int categoryID, string modifiedByName);
+        Task<IDataResult<CategoryDto>> UndoDeleteAsync(int categoryID, string modifiedByName);
         Task<IResult> HardDeleteAsync(int categoryID);
         Task<IDataResult<int>> CountAsync();
         Task<IDataResult<int>> CountByNonDeletedAsync();

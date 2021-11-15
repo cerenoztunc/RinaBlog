@@ -16,10 +16,12 @@ namespace Project.BLL.Abstract
         Task<IDataResult<ArticleListDto>> GetAllAsync();
         Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAndActiveAsync();
         Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAsync();
+        Task<IDataResult<ArticleListDto>> GetAllByDeletedAsync();
         Task<IDataResult<ArticleListDto>> GetAllByCategoryAsync(int categoryID);
         Task<IResult> AddAsync(ArticleAddDto articleAddDto, string createdByName, int userId);
         Task<IResult> UpdateAsync(ArticleUpdateDto articleUpdateDto, string modifiedByName);
         Task<IResult> DeleteAsync(int articleID, string modifiedByName);
+        Task<IResult> UndoDeleteAsync(int articleID, string modifiedByName);
         Task<IResult> HardDeleteAsync(int articleID);
         Task<IDataResult<int>> CountAsync();
         Task<IDataResult<int>> CountByNonDeletedAsync();

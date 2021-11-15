@@ -135,7 +135,8 @@
         const id = $(this).attr('data-id');
         const tableRow = $(`[name="${id}"]`);
         const articleTitle = tableRow.find('td:eq(2)').text();
-        Swal.fire({
+        
+        .fire({
             title: 'Silmek istediğinize emin misiniz?',
             text: `${articleTitle} başlıklı makale silinecektir!`,
             icon: 'warning',

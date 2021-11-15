@@ -84,6 +84,8 @@ namespace Project.UI.Areas.Admin.Controllers
                     if (roleAssignDto.HasRole) await UserManager.AddToRoleAsync(user, roleAssignDto.RoleName);
                     else await UserManager.RemoveFromRoleAsync(user, roleAssignDto.RoleName);
                 }
+                //eğer rol ataması yapılan kullanıcı aktifse logout yaptırılır
+                await UserManager.UpdateSecurityStampAsync(user);
                 var userRoleAssignAjaxViewModel = JsonSerializer.Serialize(new UserRoleAssignAjaxViewModel
                 {
                     UserDto = new UserDto

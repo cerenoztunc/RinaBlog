@@ -31,6 +31,10 @@ namespace Project.BLL.Utilities
             {
                 return $"{categoryName} adlı kategori başarıyla veritabanından silinmiştir.";
             }
+            public static string UndoDelete(string categoryName)
+            {
+                return $"{categoryName} adlı kategori başarıyla arşivden getirilmiştir.";
+            }
         }
         public static class Article
         {
@@ -54,6 +58,10 @@ namespace Project.BLL.Utilities
             public static string HardDeleteAsync(string articleName)
             {
                 return $"{articleName} adlı kategori başarıyla veritabanından silinmiştir.";
+            }
+            public static string UndoDelete(string articleName)
+            {
+                return $"{articleName} adlı kategori başarıyla arşivden geri getirilmiştir";
             }
         }
         public static class Comment
@@ -84,6 +92,10 @@ namespace Project.BLL.Utilities
             public static string HardDelete(string createdByName)
             {
                 return $"{createdByName} tarafından eklenen yorum başarıyla veritabanından silinmiştir.";
+            }
+            public static string UndoDelete(string createdByName)
+            {
+                return $"{createdByName} tarafından eklenen yorum başarıyla arşivden getirilmiştir.";
             }
         }
     }

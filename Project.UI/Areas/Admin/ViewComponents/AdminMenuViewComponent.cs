@@ -19,10 +19,12 @@ namespace Project.UI.Areas.Admin.ViewComponents
             _userManager = userManager;
         }
 
-        public ViewViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var user = _userManager.GetUserAsync(HttpContext.User).Result; //Hangi kullanıcı giriş yapmış elde ettik..
-            var roles = _userManager.GetRolesAsync(user).Result;
+            var user = await _userManager.GetUserAsync(HttpContext.User); //Hangi kullanıcı giriş yapmış elde ettik..
+            var roles = await _userManager.GetRolesAsync(user);
+            if (user == null) return Content("Kullanıcı Bulunamadı!");
+            if (roles == null) return Content("Rol Bulunamadı!");
             return View(new UserWithRolesViewModel
             {
                 User = user,

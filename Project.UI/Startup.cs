@@ -29,7 +29,12 @@ namespace Project.UI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews() //MVC projesi olarak çalýþmasý gerektiðini söyledik..Ayný zamanda aþaðýdaki Configure içine herhangi bir istek gekdiðinde uygulamanýn nereye gideceði verilmelidir..
+            services.AddControllersWithViews(options=> 
+            {
+                options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(value => "Bu alan boþ geçilemez!");
+            
+            
+            }) //MVC projesi olarak çalýþmasý gerektiðini söyledik..Ayný zamanda aþaðýdaki Configure içine herhangi bir istek gekdiðinde uygulamanýn nereye gideceði verilmelidir..
                 .AddRazorRuntimeCompilation() //Forntend tarafýnda her bir deðiþiklikte kodlarýmýzý yeniden derlememize gerek kalmasýn, derlemeden deðiþklikleri görebilelim diye ekledik..
                 .AddJsonOptions(opt=> {
                     opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());

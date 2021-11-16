@@ -18,6 +18,7 @@ namespace Project.BLL.Abstract
         Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAsync();
         Task<IDataResult<ArticleListDto>> GetAllByDeletedAsync();
         Task<IDataResult<ArticleListDto>> GetAllByCategoryAsync(int categoryID);
+        Task<IDataResult<ArticleListDto>> GetAllByViewCountAsync(bool isAscending, int? takeSize);
         Task<IResult> AddAsync(ArticleAddDto articleAddDto, string createdByName, int userId);
         Task<IResult> UpdateAsync(ArticleUpdateDto articleUpdateDto, string modifiedByName);
         Task<IResult> DeleteAsync(int articleID, string modifiedByName);

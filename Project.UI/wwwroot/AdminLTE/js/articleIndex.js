@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
 
-/* DataTables start here. */
+   /* DataTables start here. */
 
    const dataTable = $('#articlesTable').DataTable({
         dom:
@@ -64,9 +64,9 @@
                                         newArticle.CreatedByName,
                                         `${convertToShortDate(newArticle.ModifiedDate)}`,
                                         newArticle.ModifiedByName,
-                                    `<button class="btn btn-primary btn-sm btn-update" data-id="${newArticle.ID}">
+                                        `<a class="btn btn-primary btn-sm btn-update" href="/Admin/Article/Update?articleID=${newArticle.ID}>
                                         <span class="fas fa-edit"></span>
-                                    </button>
+                                    </a>
                                     <button class="btn btn-danger btn-sm btn-delete" data-id="${newArticle.ID}">
                                         <span class="fas fa-minus-circle"></span>
                                     </button>`
@@ -136,7 +136,7 @@
         const tableRow = $(`[name="${id}"]`);
         const articleTitle = tableRow.find('td:eq(2)').text();
         
-        .fire({
+        fire({
             title: 'Silmek istediğinize emin misiniz?',
             text: `${articleTitle} başlıklı makale silinecektir!`,
             icon: 'warning',

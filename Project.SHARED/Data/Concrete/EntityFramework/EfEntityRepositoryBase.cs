@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LinqKit;
+using Microsoft.EntityFrameworkCore;
 using Project.SHARED.Data.Abstract;
 using Project.SHARED.Entities.Abstract;
 using System;
@@ -73,6 +74,29 @@ namespace Project.SHARED.Data.Concrete.EntityFramework
                 }
             }
             return await query.SingleOrDefaultAsync();
+        }
+
+        public async Task<IList<T>> SearchAsync(IList<Expression<Func<T, bool>>> predicates, params Expression<Func<T, object>>[] includeProperties)
+        {
+            IQueryable<T> query = _context.Set<T>();
+            if (predicates.Any())
+            {
+                var predicateChain = PredicateBuilder.New<T>();
+                foreach (var predicate in predicates)
+                {
+                    //query = query.Where(predicate); bu ifade ekleme yaparken ve operatörüyle bağlar. Ama biz veya olmasını istedik..Örneğin aranan kelime başlıkta veya yazarda veya taglerde varsa ver demek istiyoruz. Bu yüzden linqkit paketini yükledik... ve yukarıda PredicateBuilder kullanarak istediğimizi aşağıda gerçekleştirdik..
+                    predicateChain.Or(predicate);
+                }
+                query = query.Where(predicateChain);
+            }
+            if (includeProperties.Any())
+            {
+                foreach (var includeProperty in includeProperties)
+                {
+                    query = query.Include(includeProperty);
+                }
+            }
+            return await query.ToListAsync();
         }
 
         public async Task<T> UpdateAsync(T entity)

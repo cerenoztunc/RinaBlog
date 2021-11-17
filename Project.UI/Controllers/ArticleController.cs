@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project.BLL.Abstract;
 using Project.SHARED.Utilities.Results.ComplexTypes;
+using Project.UI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,18 @@ namespace Project.UI.Controllers
             _articleService = articleService;
         }
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Search(string keyword, int currentPage=1, int pageSize=5,bool isAscending=false)
         {
-            return View();
+            var searchResult = await _articleService.SearchAsync(keyword, currentPage, pageSize, isAscending);
+            if (searchResult.ResultStatus == ResultStatus.Success)
+            {
+                return View(new ArticleSearchViewModel
+                {
+                    ArticleListDto = searchResult.Data,
+                    Keyword = keyword
+                });
+            }
+            return NotFound();
         }
         [HttpGet]
         public async Task<IActionResult> Detail(int articleID)

@@ -11,5 +11,6 @@ namespace Project.ENTITIES.DTOs
     public class UserListDto:DtoGetBase
     {
         public IList<User> Users { get; set; }
+       
     }
 }

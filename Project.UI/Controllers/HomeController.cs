@@ -16,9 +16,9 @@ namespace Project.UI.Controllers
             _articleService = articleService;
         }
 
-        public async Task<IActionResult> Index(int? categoryID)
+        public async Task<IActionResult> Index(int? categoryID, int currentPage=1,int pageSize=5, bool isAscending = false)
         {
-            var articlesResult = await (categoryID == null ? _articleService.GetAllByNonDeletedAndActiveAsync() : _articleService.GetAllByCategoryAsync(categoryID.Value));
+            var articlesResult = await (categoryID == null ? _articleService.GetAllByPagingAsync(null, currentPage,pageSize,isAscending) : _articleService.GetAllByPagingAsync(categoryID.Value, currentPage, pageSize,isAscending));
             return View(articlesResult.Data);
         }
     }

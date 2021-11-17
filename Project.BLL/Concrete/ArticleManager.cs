@@ -233,5 +233,23 @@ namespace Project.BLL.Concrete
                 Articles = takeSize == null ? sortedArticles.ToList() : sortedArticles.Take(takeSize.Value).ToList()
             });
         }
+
+        public async Task<IDataResult<ArticleListDto>> GetAllByPagingAsync(int? categoryID, int currentPage = 1, int pageSize = 5, bool isAscending = false)
+        {
+            pageSize = pageSize > 20 ? 20 : pageSize;
+            var articles = categoryID == null ? await UnitOfWork.Articles.GetAllAsync(a => a.IsActive && !a.IsDeleted, a => a.Category, a => a.User) : await UnitOfWork.Articles.GetAllAsync(a => a.CategoryID == categoryID && a.IsActive && !a.IsDeleted, a => a.Category, a => a.User);
+            //skip() metodu gösterilen makalelerin atlanmasını sağlar. Örneğin currentPage 2 ise (2-1)*pageSize = 5 olacağından 2.sayfadayken, 1.sayfada gösterilen ilk 5 makale atlanarak gösterilmeyecek 6. makaleden gösterilmeye başlanacak 
+            var sortedArticles = isAscending ? articles.OrderBy(a => a.Date).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList() : articles.OrderByDescending(a => a.Date).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+            return new DataResult<ArticleListDto>(ResultStatus.Success, new ArticleListDto
+            {
+                Articles = sortedArticles,
+                CategoryID = categoryID == null ? null : categoryID.Value,
+                CurrentPage = currentPage,
+                PageSize = pageSize,
+                TotalCount = articles.Count,
+                IsAscending = isAscending
+            });
+
+        }
     }
 }

@@ -79,9 +79,11 @@ namespace Project.BLL.Concrete
 
         public async Task<IDataResult<ArticleDto>> GetAsync(int articleID)
         {
-            var article = await UnitOfWork.Articles.GetAsync(a => a.ID == articleID, a => a.User, a => a.Category, a => a.Comments);
+            var article = await UnitOfWork.Articles.GetAsync(a => a.ID == articleID, a => a.User, a => a.Category);
             if(article != null)
             {
+                article.Comments = await UnitOfWork.Comments.GetAllAsync(c => c.ArticleID == articleID&&!c.IsDeleted &&c.IsActive);
+
                 return new DataResult<ArticleDto>(ResultStatus.Success, new ArticleDto
                 {
                     Article = article,

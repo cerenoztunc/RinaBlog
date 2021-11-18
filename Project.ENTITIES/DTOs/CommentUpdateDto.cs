@@ -11,7 +11,7 @@ namespace Project.ENTITIES.DTOs
     public class CommentUpdateDto
     {
         [Required(ErrorMessage = "{0} boş geçilmemelidir.")]
-        public int ID { get; set; }
+        public int Id { get; set; }
         [DisplayName("Yorum")]
         [Required(ErrorMessage = "{0} boş geçilmemelidir.")]
         [MaxLength(1000, ErrorMessage = "{0} {1} karakterden büyük olmamalıdır.")]
@@ -21,6 +21,6 @@ namespace Project.ENTITIES.DTOs
         [Required(ErrorMessage = "{0} boş geçilmemelidir.")]
         public bool IsActive { get; set; }
         [Required(ErrorMessage = "{0} boş geçilmemelidir.")]
-        public int ArticleId { get; set; }
+        public int ArticleID { get; set; }
     }
 }

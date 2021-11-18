@@ -47,9 +47,9 @@ namespace Project.UI.Areas.Admin.Controllers
         }
         [Authorize(Roles = "SuperAdmin, Comment.Read")]
         [HttpGet]
-        public async Task<IActionResult> GetDetail(int commentID)
+        public async Task<IActionResult> GetDetail(int commentId)
         {
-            var result = await _commentService.GetAsync(commentID);
+            var result = await _commentService.GetAsync(commentId);
             if(result.ResultStatus == ResultStatus.Success)
             {
                 return PartialView("_CommentDetailPartial", result.Data);
@@ -65,7 +65,10 @@ namespace Project.UI.Areas.Admin.Controllers
         public async Task<IActionResult> Delete(int commentId)
         {
             var result = await _commentService.DeleteAsync(commentId, LoggedInUser.UserName);
-            var commentResult = JsonSerializer.Serialize(result);
+            var commentResult = JsonSerializer.Serialize(result, new JsonSerializerOptions 
+            { 
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
             return Json(commentResult);
         }
         [Authorize(Roles = "SuperAdmin, Comment.Update")]
@@ -142,7 +145,10 @@ namespace Project.UI.Areas.Admin.Controllers
         public async Task<IActionResult> UndoDelete(int commentId)
         {
             var result = await _commentService.UndoDeleteAsync(commentId, LoggedInUser.UserName);
-            var commentResult = JsonSerializer.Serialize(result);
+            var commentResult = JsonSerializer.Serialize(result, new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
             return Json(commentResult);
         }
         [Authorize(Roles = "SuperAdmin, Comment.Delete")]
@@ -150,7 +156,10 @@ namespace Project.UI.Areas.Admin.Controllers
         public async Task<IActionResult> HardDelete(int commentId)
         {
             var result = await _commentService.HardDeleteAsync(commentId);
-            var hardDeletedCommentResult = JsonSerializer.Serialize(result);
+            var hardDeletedCommentResult = JsonSerializer.Serialize(result, new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            });
             return Json(hardDeletedCommentResult);
         }
 

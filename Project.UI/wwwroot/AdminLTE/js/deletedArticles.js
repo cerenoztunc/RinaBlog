@@ -135,7 +135,7 @@
                     $.ajax({
                         type: 'POST',
                         dataType: 'json',
-                        data: { articleId: id },
+                        data: { articleID: id },
                         url: '/Admin/Article/HardDelete/',
                         success: function (data) {
                             const articleResult = jQuery.parseJSON(data);
@@ -189,7 +189,7 @@
                     $.ajax({
                         type: 'POST',
                         dataType: 'json',
-                        data: { articleId: id },
+                        data: { articleID: id },
                         url: '/Admin/Article/UndoDelete/',
                         success: function (data) {
                             const articleUndoDeleteResult = jQuery.parseJSON(data);

@@ -136,7 +136,7 @@
         const tableRow = $(`[name="${id}"]`);
         const articleTitle = tableRow.find('td:eq(2)').text();
         
-        fire({
+        Swal.fire({
             title: 'Silmek istediğinize emin misiniz?',
             text: `${articleTitle} başlıklı makale silinecektir!`,
             icon: 'warning',
@@ -150,7 +150,7 @@
                 $.ajax({
                     type: 'POST',
                     dataType: 'json',
-                    data: { articleId: id },
+                    data: { articleID: id },
                     url: '/Admin/Article/Delete/',
                     success: function (data) {
                         const articleReult = jQuery.parseJSON(data);

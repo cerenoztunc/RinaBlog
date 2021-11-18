@@ -148,9 +148,9 @@ namespace Project.UI.Areas.Admin.Controllers
         }
         [Authorize(Roles = "SuperAdmin, Article.Delete")]
         [HttpPost]
-        public async Task<JsonResult> Delete(int articleId)
+        public async Task<JsonResult> Delete(int articleID)
         {
-            var result = await _articleService.DeleteAsync(articleId, LoggedInUser.UserName);
+            var result = await _articleService.DeleteAsync(articleID, LoggedInUser.UserName);
             var articleResult = JsonSerializer.Serialize(result);
             return Json(articleResult);
         }
@@ -185,17 +185,17 @@ namespace Project.UI.Areas.Admin.Controllers
         }
         [Authorize(Roles = "SuperAdmin, Article.Update")]
         [HttpPost]
-        public async Task<JsonResult> UndoDelete(int articleId)
+        public async Task<JsonResult> UndoDelete(int articleID)
         {
-            var result = await _articleService.UndoDeleteAsync(articleId, LoggedInUser.UserName);
+            var result = await _articleService.UndoDeleteAsync(articleID, LoggedInUser.UserName);
             var undoDeletedArticleResult = JsonSerializer.Serialize(result);
             return Json(undoDeletedArticleResult);
         }
         [Authorize(Roles = "SuperAdmin, Article.Delete")]
         [HttpPost]
-        public async Task<JsonResult> HardDelete(int articleId)
+        public async Task<JsonResult> HardDelete(int articleID)
         {
-            var result = await _articleService.HardDeleteAsync(articleId);
+            var result = await _articleService.HardDeleteAsync(articleID);
             var hardDeletedArticleResult = JsonSerializer.Serialize(result);
             return Json(hardDeletedArticleResult);
         }

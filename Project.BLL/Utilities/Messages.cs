@@ -71,9 +71,9 @@ namespace Project.BLL.Utilities
                 if (isPlural) return "Hiç bir yorum bulunamadı.";
                 return "Böyle bir yorum bulunamadı.";
             }
-            public static string Approve(int commentID)
+            public static string Approve(int commentId)
             {
-                return $"{commentID} no'lu yorum başarıyla onaylanmıştır.";
+                return $"{commentId} no'lu yorum başarıyla onaylanmıştır.";
             }
 
             public static string Add(string createdByName)

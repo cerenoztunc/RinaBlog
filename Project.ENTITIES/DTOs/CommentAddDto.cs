@@ -21,6 +21,6 @@ namespace Project.ENTITIES.DTOs
         [MinLength(2, ErrorMessage = "{0} {1} karakterden az olmamalıdır.")]
         public string CreatedByName { get; set; }
         [Required(ErrorMessage = "{0} boş geçilmemelidir.")]
-        public int ArticleId { get; set; }
+        public int ArticleID { get; set; }
     }
 }

@@ -137,7 +137,7 @@
                             if (commentResult.Data) {
                                 Swal.fire(
                                     'Silindi!',
-                                    `${commentResult.Data.Comment.ID} no'lu yorum başarıyla silinmiştir.`,
+                                    `${commentResult.Data.Comment.Id} no'lu yorum başarıyla silinmiştir.`,
                                     'success'
                                 );
 

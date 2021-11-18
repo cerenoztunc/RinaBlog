@@ -37,6 +37,7 @@ namespace Project.UI.Controllers
             var articleResult = await _articleService.GetAsync(articleID);
             if(articleResult.ResultStatus == ResultStatus.Success)
             {
+                await _articleService.IncreaseViewCountAsync(articleID);
                 return View(articleResult.Data);
             }
             return NotFound();

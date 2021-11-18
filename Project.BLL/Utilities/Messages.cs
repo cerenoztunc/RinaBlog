@@ -63,6 +63,10 @@ namespace Project.BLL.Utilities
             {
                 return $"{articleName} adlı kategori başarıyla arşivden geri getirilmiştir";
             }
+            public static string IncreaseViewCount(string articleTitle)
+            {
+                return $"{articleTitle} başlıklı makalenin okunma sayısı başarıyla arttırılmıştır.";
+            }
         }
         public static class Comment
         {

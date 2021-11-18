@@ -288,5 +288,18 @@ namespace Project.BLL.Concrete
                 IsAscending = isAscending
             });
         }
+
+        public async Task<IResult> IncreaseViewCountAsync(int articleID)
+        {
+            var article = await UnitOfWork.Articles.GetAsync(a => a.ID == articleID);
+            if(article == null)
+            {
+                return new Result(ResultStatus.Error, Messages.Article.NotFound(false));
+            }
+            article.ViewsCount += 1;
+            await UnitOfWork.Articles.UpdateAsync(article);
+            await UnitOfWork.SaveAsync();
+            return new Result(ResultStatus.Success, Messages.Article.IncreaseViewCount(article.Title));
+        }
     }
 }

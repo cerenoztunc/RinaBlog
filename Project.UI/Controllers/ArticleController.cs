@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project.BLL.Abstract;
+using Project.ENTITIES.ComplexTypes;
 using Project.SHARED.Utilities.Results.ComplexTypes;
 using Project.UI.Models;
 using System;
@@ -37,8 +38,19 @@ namespace Project.UI.Controllers
             var articleResult = await _articleService.GetAsync(articleID);
             if(articleResult.ResultStatus == ResultStatus.Success)
             {
+                var userArticles = await _articleService.GetAllByUserIdOnFilter(articleResult.Data.Article.UserID, FilterBy.Category, OrderBy.Date, false, 10, articleResult.Data.Article.CategoryID, DateTime.Now, DateTime.Now, 0, 99999, 0, 99999);
                 await _articleService.IncreaseViewCountAsync(articleID);
-                return View(articleResult.Data);
+                return View(new ArticleDetailViewModel
+                {
+                    ArticleDto = articleResult.Data,
+                    ArticleDetailRightSideBarViewModel = new ArticleDetailRightSideBarViewModel
+                    {
+                        ArticleListDto = userArticles.Data,
+                        Header = "Kullanıcının Aynı Kategori Üzerindeki En Çok Okunan Makaleleri",
+                        User = articleResult.Data.Article.User
+                    }
+
+                });
             }
             return NotFound();
         }

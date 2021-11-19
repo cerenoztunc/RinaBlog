@@ -52,14 +52,14 @@
                                 if (i%2 == 0)
                                 {
                                     <li class="list-group-item list-group-item-primary">
-                                        <a asp-controller="Article" asp-action="Detail" asp-route-categoryID="@Model.Articles[i].ID">@Model.Articles[i].Title
+                                        <a asp-controller="Article" asp-action="Detail" asp-route-articleID="@Model.Articles[i].ID">@Model.Articles[i].Title
                                         </a>
                                     </li>
                                 }
                                 else
                                 {
                                     <li class="list-group-item ">
-                                        <a asp-controller="Article" asp-action="Detail" asp-route-categoryID="@Model.Articles[i].ID">@Model.Articles[i].Title
+                                        <a asp-controller="Article" asp-action="Detail" asp-route-articleID="@Model.Articles[i].ID">@Model.Articles[i].Title
                                         </a>
                                     </li>
                                 }

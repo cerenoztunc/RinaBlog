@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Project.BLL.Abstract;
 using Project.ENTITIES.Concrete;
+using Project.ENTITIES.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,9 +27,19 @@ namespace Project.UI.Controllers
             return View(articlesResult.Data);
         }
         [HttpGet]
-        public async Task<IActionResult> About()
+        public IActionResult About()
         {
             return View(_aboutUsPageInfo);
+        }
+        [HttpGet]
+        public IActionResult Contact()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Contact(EmailSendDto emailSendDto)
+        {
+            return View();
         }
     }
 }

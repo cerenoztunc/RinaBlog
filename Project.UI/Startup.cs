@@ -6,14 +6,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Project.BLL.AutoMapper.Profiles;
 using Project.BLL.Extensions;
+using Project.ENTITIES.Concrete;
 using Project.UI.AutoMapper.Profiles;
 using Project.UI.Helpers.Abstract;
 using Project.UI.Helpers.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 
 namespace Project.UI
@@ -29,6 +32,7 @@ namespace Project.UI
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<AboutUsPageInfo>(Configuration.GetSection("AboutUsPageInfo"));
             services.AddControllersWithViews(options=> 
             {
                 options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(value => "Bu alan boþ geçilemez!");

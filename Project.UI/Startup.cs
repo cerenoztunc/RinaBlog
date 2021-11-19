@@ -8,6 +8,7 @@ using Project.BLL.AutoMapper.Profiles;
 using Project.BLL.Extensions;
 using Project.ENTITIES.Concrete;
 using Project.UI.AutoMapper.Profiles;
+using Project.UI.Filters;
 using Project.UI.Helpers.Abstract;
 using Project.UI.Helpers.Concrete;
 using System;
@@ -37,6 +38,7 @@ namespace Project.UI
             services.AddControllersWithViews(options=> 
             {
                 options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(value => "Bu alan boþ geçilemez!");
+                options.Filters.Add<MvcExceptionFilter>();
             
             
             }) //MVC projesi olarak çalýþmasý gerektiðini söyledik..Ayný zamanda aþaðýdaki Configure içine herhangi bir istek gekdiðinde uygulamanýn nereye gideceði verilmelidir..

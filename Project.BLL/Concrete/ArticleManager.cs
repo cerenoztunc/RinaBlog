@@ -12,6 +12,7 @@ using Project.SHARED.Utilities.Results.ComplexTypes;
 using Project.SHARED.Utilities.Results.Concrete;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -134,6 +135,7 @@ namespace Project.BLL.Concrete
         public async Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAsync()
         {
             var articles = await UnitOfWork.Articles.GetAllAsync(a => !a.IsDeleted, a => a.User, a=>a.Category);
+            throw new SqlNullValueException();
             if (articles.Count > -1)
             {
                 return new DataResult<ArticleListDto>(ResultStatus.Success, new ArticleListDto
@@ -203,6 +205,7 @@ namespace Project.BLL.Concrete
         public async Task<IDataResult<ArticleListDto>> GetAllByDeletedAsync()
         {
             var articles = await UnitOfWork.Articles.GetAllAsync(a => a.IsDeleted, a => a.User, a => a.Category);
+            
             if (articles.Count > -1)
             {
                 return new DataResult<ArticleListDto>(ResultStatus.Success, new ArticleListDto

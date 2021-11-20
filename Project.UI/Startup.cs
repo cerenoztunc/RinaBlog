@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Project.BLL.AutoMapper.Profiles;
 using Project.BLL.Extensions;
 using Project.ENTITIES.Concrete;
+using Project.SHARED.Utilities.Extensions;
 using Project.UI.AutoMapper.Profiles;
 using Project.UI.Filters;
 using Project.UI.Helpers.Abstract;
@@ -36,6 +37,7 @@ namespace Project.UI
             services.Configure<AboutUsPageInfo>(Configuration.GetSection("AboutUsPageInfo"));
             services.Configure<WebSiteInfo>(Configuration.GetSection("WebSiteInfo"));
             services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
+            services.ConfigureWritable<AboutUsPageInfo>(Configuration.GetSection("AboutUsPageInfo"));
             services.AddControllersWithViews(options=> 
             {
                 options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(value => "Bu alan boþ geçilemez!");

@@ -62,7 +62,7 @@ namespace Project.BLL.Concrete
             smtpClient.Port = _smtpSettings.Port;
             smtpClient.EnableSsl = true; //güvenlik
             smtpClient.UseDefaultCredentials = false; //kendi hesap bilgilerimizi vereceğiz
-            smtpClient.Credentials = new NetworkCredential(_smtpSettings.SenderEmail, _smtpSettings.Password);
+            smtpClient.Credentials = new NetworkCredential(_smtpSettings.Username, _smtpSettings.Password);
             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
 
             smtpClient.Send(message);

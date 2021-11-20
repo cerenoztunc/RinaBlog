@@ -36,7 +36,7 @@
 
 
             <!-- Sidebar Widgets Column -->
-            
+
 
 
         </div>
@@ -49,15 +49,15 @@
         <div class="container">
             <p class="m-0 text-center text-white">Tüm Hakları Saklıdır &copy; RinaBlog 2021</p>
         </div>-->
-        <!-- /.container -->
+    <!-- /.container -->
     <!--</footer>-->
-
     <!-- Bootstrap core JavaScript -->
     <script src="~/BlogHome/vendor/jquery/jquery.min.js"></script>
     <script src="~/BlogHome/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" crossorigin="anonymous"></script>
 
     @await RenderSectionAsync("Scripts", false)
+    @await Component.InvokeAsync("NToastNotify")
 
 </body>
 

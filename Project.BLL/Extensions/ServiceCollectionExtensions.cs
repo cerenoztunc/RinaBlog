@@ -41,6 +41,7 @@ namespace Project.BLL.Extensions
             serviceCollection.AddScoped<ICategoryService, CategoryManager>();
             serviceCollection.AddScoped<IArticleService, ArticleManager>();
             serviceCollection.AddScoped<ICommentService, CommentManager>();
+            serviceCollection.AddSingleton<IMailService, MailManager>(); //singleton yaptık çünkü uygulama için bir tane oluşturulacak ve sürekli o kullanılacak..
             return serviceCollection;
         }
     }

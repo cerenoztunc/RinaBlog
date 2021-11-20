@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Project.ENTITIES.Concrete;
 using Project.ENTITIES.DTOs;
 using Project.UI.Areas.Admin.Models;
 using System;
@@ -14,6 +15,7 @@ namespace Project.UI.AutoMapper.Profiles
         {
             CreateMap<ArticleAddViewModel, ArticleAddDto>();
             CreateMap<ArticleUpdateDto, ArticleUpdateViewModel>().ReverseMap();
+            CreateMap<ArticleRightSideBarWidgetOptions, ArticleRightSideBarWidgetOptionsViewModel>();
         }
     }
 }

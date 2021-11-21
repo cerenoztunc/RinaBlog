@@ -4,6 +4,7 @@ using Project.BLL.Abstract;
 using Project.ENTITIES.ComplexTypes;
 using Project.ENTITIES.Concrete;
 using Project.SHARED.Utilities.Results.ComplexTypes;
+using Project.UI.Attributes;
 using Project.UI.Models;
 using System;
 using System.Collections.Generic;
@@ -37,13 +38,14 @@ namespace Project.UI.Controllers
             return NotFound();
         }
         [HttpGet]
+        [ViewCountFilter]
         public async Task<IActionResult> Detail(int articleID)
         {
             var articleResult = await _articleService.GetAsync(articleID);
             if(articleResult.ResultStatus == ResultStatus.Success)
             {
                 var userArticles = await _articleService.GetAllByUserIdOnFilter(articleResult.Data.Article.UserID, _articleRightSideBarWidgetOptions.FilterBy, _articleRightSideBarWidgetOptions.OrderBy, _articleRightSideBarWidgetOptions.IsAscending, _articleRightSideBarWidgetOptions.TakeSize, _articleRightSideBarWidgetOptions.CategoryID, _articleRightSideBarWidgetOptions.StartAt, _articleRightSideBarWidgetOptions.EndAt, _articleRightSideBarWidgetOptions.MinViewCount, _articleRightSideBarWidgetOptions.MaxViewCount, _articleRightSideBarWidgetOptions.MinCommentCount, _articleRightSideBarWidgetOptions.MaxCommentCount);
-                await _articleService.IncreaseViewCountAsync(articleID);
+                //await _articleService.IncreaseViewCountAsync(articleID);
                 return View(new ArticleDetailViewModel
                 {
                     ArticleDto = articleResult.Data,

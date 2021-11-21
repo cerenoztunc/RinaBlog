@@ -51,7 +51,7 @@ namespace Project.UI.Helpers.Concrete
             }
         }
 
-        public async Task<IDataResult<ImageUploadedDto>> Upload(string name, IFormFile pictureFile, PictureTypes pictureTypes, string folderName=null)
+        public string Upload(string name, IFormFile pictureFile, PictureTypes pictureTypes, string folderName=null)
         {
             //folderName null gelirse resim tipine göre klasör adı ataması yapılır..
             folderName ??= pictureTypes == PictureTypes.User ? userImageFolder : postImagesFolder;
@@ -81,23 +81,15 @@ namespace Project.UI.Helpers.Concrete
             var path = Path.Combine($"{_wwwroot}/{imgFolder}/{folderName}", newFileName);
 
             //sistem için oluşturulan yeni dosya yoluna resim kopyalanır..
-            await using (var stream = new FileStream(path, FileMode.Create))
+            using (var stream = new FileStream(path, FileMode.Create))
             {
-                await pictureFile.CopyToAsync(stream);
+                pictureFile.CopyToAsync(stream);
             }
 
             //resim tipine göre kullanıcı mesajı oluşturulur..
             string message = pictureTypes == PictureTypes.User ? $"{name} adlı kullanıcının resmi başarıyla yüklenmiştir." : $"{name} adlı makalenin resmi başarıyla yüklenmiştir.";
 
-            return new DataResult<ImageUploadedDto>(ResultStatus.Success,message , 
-                new ImageUploadedDto 
-                {
-                    FullName = $"{folderName}/{newFileName}",
-                    OldName = oldFileName,
-                    Extension = fileExtension,
-                    Path = path,
-                    Size = pictureFile.Length
-                });
+            return $"{folderName}/{newFileName}";
         }
     }
 }

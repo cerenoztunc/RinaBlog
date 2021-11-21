@@ -158,6 +158,7 @@ namespace Project.BLL.Concrete
                 comment.ModifiedByName = modifiedByName;
                 comment.ModifiedDate = DateTime.Now;
                 var deletedComment = await UnitOfWork.Comments.UpdateAsync(comment);
+
                 article.CommentCount -= 1;
                 await UnitOfWork.Articles.UpdateAsync(article);
                 await UnitOfWork.SaveAsync();

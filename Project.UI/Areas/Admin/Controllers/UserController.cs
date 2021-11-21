@@ -81,8 +81,8 @@ namespace Project.UI.Areas.Admin.Controllers
             var errors = ModelState.Values.SelectMany(v => v.Errors);
             if (ModelState.IsValid)
             {
-                var uploadedImageDtoResult = await ImageHelper.Upload(userAddDto.UserName,userAddDto.PictureFile,PictureTypes.User);
-                userAddDto.Picture = uploadedImageDtoResult.ResultStatus == ResultStatus.Success ? uploadedImageDtoResult.Data.FullName : "userImages/profile.jpg";
+                //var uploadedImageDtoResult = await ImageHelper.Upload(userAddDto.UserName,userAddDto.PictureFile,PictureTypes.User);
+                //userAddDto.Picture = uploadedImageDtoResult.ResultStatus == ResultStatus.Success ? uploadedImageDtoResult.Data.FullName : "userImages/profile.jpg";
                 var user = Mapper.Map<User>(userAddDto);
                 var result = await UserManager.CreateAsync(user, userAddDto.Password);
                 if (result.Succeeded)
@@ -174,8 +174,8 @@ namespace Project.UI.Areas.Admin.Controllers
                 var oldUserPicture = oldUser.Picture;
                 if(userUpdateDto.PictureFile != null)
                 {
-                    var uploadedImageDtoResult = await ImageHelper.Upload(userUpdateDto.UserName, userUpdateDto.PictureFile, PictureTypes.User);
-                    userUpdateDto.Picture = uploadedImageDtoResult.ResultStatus == ResultStatus.Success ? uploadedImageDtoResult.Data.FullName : "userImages/profile.jpg";
+                    //var uploadedImageDtoResult = await ImageHelper.Upload(userUpdateDto.UserName, userUpdateDto.PictureFile, PictureTypes.User);
+                    //userUpdateDto.Picture = uploadedImageDtoResult.ResultStatus == ResultStatus.Success ? uploadedImageDtoResult.Data.FullName : "userImages/profile.jpg";
                     if (oldUserPicture != "userImages/profile.jpg")
                         isNewPictureUploaded = true;
                 }
@@ -243,8 +243,8 @@ namespace Project.UI.Areas.Admin.Controllers
                 var oldUserPicture = oldUser.Picture;
                 if (userUpdateDto.PictureFile != null)
                 {
-                    var uploadedImageDtoResult = await ImageHelper.Upload(userUpdateDto.UserName, userUpdateDto.PictureFile, PictureTypes.User);
-                    userUpdateDto.Picture = uploadedImageDtoResult.ResultStatus == ResultStatus.Success ? uploadedImageDtoResult.Data.FullName : "userImages/profile.jpg";
+                    //var uploadedImageDtoResult = await ImageHelper.Upload(userUpdateDto.UserName, userUpdateDto.PictureFile, PictureTypes.User);
+                    //userUpdateDto.Picture = uploadedImageDtoResult.ResultStatus == ResultStatus.Success ? uploadedImageDtoResult.Data.FullName : "userImages/profile.jpg";
                     if (oldUserPicture != "userImages/profile.jpg")
                     isNewPictureUploaded = true;
                 }

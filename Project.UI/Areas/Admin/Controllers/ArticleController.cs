@@ -63,8 +63,8 @@ namespace Project.UI.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var articleAddDto = Mapper.Map<ArticleAddDto>(articleAddViewModel);
-                var imageResult = await ImageHelper.Upload(articleAddViewModel.Title, articleAddViewModel.ThumbnailFile, PictureTypes.Post);
-                articleAddDto.Thumbnail = imageResult.Data.FullName;
+                //var imageResult = await ImageHelper.Upload(articleAddViewModel.Title, articleAddViewModel.ThumbnailFile, PictureTypes.Post);
+                //articleAddDto.Thumbnail = imageResult.Data.FullName;
                 var result = await _articleService.AddAsync(articleAddDto, LoggedInUser.UserName,LoggedInUser.Id);
                 if(result.ResultStatus == ResultStatus.Success)
                 {
@@ -114,8 +114,8 @@ namespace Project.UI.Areas.Admin.Controllers
                 var oldThumbnail = articleUpdateViewModel.Thumbnail;
                 if(articleUpdateViewModel.ThumbnailFile != null)
                 {
-                    var uploadedImageResult = await ImageHelper.Upload(articleUpdateViewModel.Title, articleUpdateViewModel.ThumbnailFile,PictureTypes.Post);
-                    articleUpdateViewModel.Thumbnail = uploadedImageResult.ResultStatus == ResultStatus.Success ? uploadedImageResult.Data.FullName : "postImages/bremen.jpg";
+                    //var uploadedImageResult = await ImageHelper.Upload(articleUpdateViewModel.Title, articleUpdateViewModel.ThumbnailFile,PictureTypes.Post);
+                    //articleUpdateViewModel.Thumbnail = uploadedImageResult.ResultStatus == ResultStatus.Success ? uploadedImageResult.Data.FullName : "postImages/bremen.jpg";
                     if(oldThumbnail != "postImages/bremen.jpg")
                     {
                         isNewThumbnailUploaded = true;

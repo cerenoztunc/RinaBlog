@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -34,6 +35,15 @@ namespace Project.UI
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IImageHelper, ImageHelper>();
+            services.AddSingleton(provider => new MapperConfiguration(cfg =>
+              {
+                  cfg.AddProfile(new UserProfile(provider.GetService<IImageHelper>()));
+                  cfg.AddProfile(new CategoryProfile());
+                  cfg.AddProfile(new ArticleProfile());
+                  cfg.AddProfile(new ViewModelsProfile());
+                  cfg.AddProfile(new CommentProfile());
+              }).CreateMapper()); //Derlenme esnasýnda automapper'ýn burdaki sýnýflarý taramasýný saðlar..Ayný zamanda UserProfile'a nasýl taranmasý gerektiðini söyledik
             services.Configure<AboutUsPageInfo>(Configuration.GetSection("AboutUsPageInfo"));
             services.Configure<WebSiteInfo>(Configuration.GetSection("WebSiteInfo"));
             services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
@@ -58,9 +68,8 @@ namespace Project.UI
                 }).AddNToastNotifyToastr();
             services.AddSession();
 
-            services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile),typeof(UserProfile), typeof(ViewModelsProfile), typeof(CommentProfile)); //Derlenme esnasýnda automapper'ýn burdaki sýnýflarý taramasýný saðlar..
             services.LoadMyServices(connectionString:Configuration.GetConnectionString("LocalDB"));
-            services.AddScoped<IImageHelper, ImageHelper>();
+            
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = new PathString("/Admin/Auth/Login"); 

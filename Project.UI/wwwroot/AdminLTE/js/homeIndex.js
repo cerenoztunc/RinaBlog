@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+    //DataTable
     $('#articlesTable').DataTable({
         language: {
             "sDecimal": ",",
@@ -33,5 +34,47 @@
         },
         "order":[[4,"desc"]]
 
+    });
+    //DataTable
+
+    //Chart.js
+    
+    $.get('/Admin/Article/GetAllByView/?isAscending=false&takeSize=10',
+        function (data) {
+        const articleResult = jQuery.parseJSON(data);
+        let viewCountContext = $('#viewCountChart');
+        let viewCountChart = new Chart(viewCountContext, {
+            type: 'bar',
+            data: {
+                labels: articleResult.$values.map(article => article.Title),
+                datasets: [
+                    {
+                        label: 'Okunma Sayısı',
+                        data: articleResult.$values.map(article => article.ViewsCount),
+                        backgroundColor: '#3F3351',
+                        hoverBorderWidth: 4,
+                        hoverBorderColor: '#87AAAA'
+                    },
+                    {
+                        label: 'Yorum Sayısı',
+                        data: articleResult.$values.map(article => article.CommentCount),
+                        backgroundColor: '#864879',
+                        hoverBorderWidth: 4,
+                        hoverBorderColor: '#87AAAA'
+                    }
+                ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 19
+                            }
+                        }
+                    }
+                }
+            }
+        });
     });
 });

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Project.UI.Controllers
 {
+    [Route("/")]
     public class HomeController : Controller
     {
         private readonly IArticleService _articleService;
@@ -27,22 +28,29 @@ namespace Project.UI.Controllers
             _toastNotification = toastNotification;
             _aboutUsPageInfoWriter = aboutUsPageInfoWriter;
         }
-
+        [Route("index")]
+        [Route("anasayfa")]
+        [Route("")]
+        [HttpGet]
         public async Task<IActionResult> Index(int? categoryID, int currentPage=1,int pageSize=5, bool isAscending = false)
         {
             var articlesResult = await (categoryID == null ? _articleService.GetAllByPagingAsync(null, currentPage,pageSize,isAscending) : _articleService.GetAllByPagingAsync(categoryID.Value, currentPage, pageSize,isAscending));
             return View(articlesResult.Data);
         }
+        [Route("hakkimizda")]
+        [Route("hakkinda")]
         [HttpGet]
         public IActionResult About()
         {
             return View(_aboutUsPageInfo);
         }
+        [Route("iletisim")]
         [HttpGet]
         public IActionResult Contact()
         {
             return View();
         }
+        [Route("iletisim")]
         [HttpPost]
         public IActionResult Contact(EmailSendDto emailSendDto)
         {

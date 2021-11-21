@@ -103,6 +103,11 @@ namespace Project.UI
                     areaName:"Admin", 
                     pattern: "Admin/{controller=Home}/{action=Index}/{id?}"
                     ); //Admin Area'nýn route'ýný belirledik...Örneðin biz admin area içindeki article index'e gidersek burada eklenmiþ olan tüm makaleleri bir tablo içerisinde görebileceðiz. Burda crud iþlemleri yapabiliriz. Ancak direkt olarak sitedeki article index'e gidersek buradaki tüm makalaleri bir blog tablosunda göreceðiz...
+                endpoints.MapControllerRoute(
+                    name: "article",
+                    pattern:"{title}/{articleID}",
+                    defaults:new {controller="Article",action="Detail"}
+                    );
                 endpoints.MapDefaultControllerRoute(); //Varsayýlan olarak site açýldýðýnda HomeController ve Index kýsmýna git dedik..
             });
         }

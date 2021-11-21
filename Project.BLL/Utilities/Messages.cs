@@ -8,12 +8,23 @@ namespace Project.BLL.Utilities
 {
     public static class Messages
     {
+        public static class General
+        {
+            public static string ValidationError()
+            {
+                return $"Bir veya daha fazla validasyon hatası ile karşılaşıldı.";
+            }
+        }
         public static class Category
         {
             public static string NotFound(bool isPlural)
             {
                 if (isPlural) return "Hiçbir kategori bulunamadı.";
                 return "Böyle bir kategori bulunamadı.";
+            }
+            public static string NotFoundById(int categoryID)
+            {
+                return $"{categoryID} kategori koduna ait bir kategori bulunamadı.";
             }
             public static string AddAsync(string categoryName)
             {
@@ -42,6 +53,10 @@ namespace Project.BLL.Utilities
             {
                 if (isPlural) return "Hiçbir makale bulunamadı.";
                 return "Böyle bir makale bulunamadı.";
+            }
+            public static string NotFoundById(int articleID)
+            {
+                return $"{articleID} makale koduna ait bir makale bulunamadı.";
             }
             public static string AddAsync(string articleName)
             {
@@ -100,6 +115,13 @@ namespace Project.BLL.Utilities
             public static string UndoDelete(string createdByName)
             {
                 return $"{createdByName} tarafından eklenen yorum başarıyla arşivden getirilmiştir.";
+            }
+        }
+        public static class User
+        {
+            public static string NotFoundById(int userId)
+            {
+                return $"{userId} kullanıcı koduna ait bir kullanıcı bulunamadı.";
             }
         }
     }

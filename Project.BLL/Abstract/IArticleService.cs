@@ -13,7 +13,9 @@ namespace Project.BLL.Abstract
     public interface IArticleService
     {
         Task<IDataResult<ArticleDto>> GetAsync(int articleID);
+        Task<IDataResult<ArticleDto>> GetByIdAsync(int articleID, bool includeCategory, bool includeComments, bool includeUser);
         Task<IDataResult<ArticleUpdateDto>> GetArticleUpdateDtoAsync(int articleID);
+        Task<IDataResult<ArticleListDto>> GetAllAsyncV2(int? CategoryID, int? userId, bool? isActive, bool? isDeleted, int currentPage, int pageSize, OrderByGeneral orderBy, bool isAscending, bool includeCategory, bool includeComments, bool includeUser);
         Task<IDataResult<ArticleListDto>> GetAllAsync();
         Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAndActiveAsync();
         Task<IDataResult<ArticleListDto>> GetAllByNonDeletedAsync();

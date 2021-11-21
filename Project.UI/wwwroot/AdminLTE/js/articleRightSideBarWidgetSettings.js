@@ -46,7 +46,10 @@
             showAnim: "drop",
             showOptions: {direction:"up"},
             //minDate: -3,
-            maxDate: 0
+            maxDate: 0,
+            onSelect: function (selectedDate) {
+                $("#endAtDatePicker").datepicker('option', 'minDate', selectedDate || getTodaysDate());
+            }
         });
         $("#endAtDatePicker").datepicker({
             closeText: "kapat",

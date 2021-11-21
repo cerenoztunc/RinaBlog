@@ -20,11 +20,11 @@ namespace Project.DAL.Concrete
         {
             _context = context;
         }
-        public IArticleRepository Articles => _articleRepository ?? new EfArticleRepository(_context);
+        public IArticleRepository Articles => _articleRepository ??= new EfArticleRepository(_context);
 
-        public ICategoryRepository Categories => _categoryRepository ?? new EfCategoryRepository(_context);
+        public ICategoryRepository Categories => _categoryRepository ??= new EfCategoryRepository(_context);
 
-        public ICommentRepository Comments => _commentRepository ?? new EfCommentRepository(_context);
+        public ICommentRepository Comments => _commentRepository ??= new EfCommentRepository(_context);
 
        //null coalescing operatörü, eğer _commentRepository varsa onu dön yoksa yeni bir instance al oluştur...
 

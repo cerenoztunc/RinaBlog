@@ -56,7 +56,7 @@ namespace Project.SHARED.Data.Concrete.EntityFramework
                     query = query.Include(includeProperty);
                 }
             }
-            return await query.ToListAsync();
+            return await query.AsNoTracking().ToListAsync();
         }
 
         public async Task<T> GetAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
@@ -73,7 +73,7 @@ namespace Project.SHARED.Data.Concrete.EntityFramework
                     query = query.Include(includeProperty);
                 }
             }
-            return await query.SingleOrDefaultAsync();
+            return await query.AsNoTracking().SingleOrDefaultAsync();
         }
 
         public async Task<IList<T>> SearchAsync(IList<Expression<Func<T, bool>>> predicates, params Expression<Func<T, object>>[] includeProperties)
@@ -96,7 +96,7 @@ namespace Project.SHARED.Data.Concrete.EntityFramework
                     query = query.Include(includeProperty);
                 }
             }
-            return await query.ToListAsync();
+            return await query.AsNoTracking().ToListAsync();
         }
 
         public async Task<T> UpdateAsync(T entity)

@@ -19,7 +19,7 @@ namespace Project.BLL.Extensions
     {
         public static IServiceCollection LoadMyServices(this IServiceCollection serviceCollection,string connectionString)
         {
-            serviceCollection.AddDbContext<RinaBlogContext>(options => options.UseSqlServer(connectionString)); //DbContext'imizi kayıt ettik..
+            serviceCollection.AddDbContext<RinaBlogContext>(options => options.UseSqlServer(connectionString).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)); //DbContext'imizi kayıt ettik..
             serviceCollection.AddIdentity<User, Role>(options => {
                 //user password options
                 options.Password.RequireDigit = false;
